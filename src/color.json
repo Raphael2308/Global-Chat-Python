@@ -1,0 +1,12 @@
+{
+    "white_color":"0xffffff",
+
+    "red_color":"0xff6a6a",
+    "orange_color":"0xffa66a",
+    "yellow_color":"0xfffa6a",
+    "light_green_color":"0x6aff9b",
+    "dark_blue_color":"None",
+    "blue_color":"0x6a7bff",
+    "light_blue_color":"0x6adfff",
+    "purple_color":"0x856aff"
+}
