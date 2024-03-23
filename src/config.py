@@ -3,9 +3,9 @@ bot_logo_url = "https://raw.githubusercontent.com/Blackstonecoden/Global-Chat/ma
 ##########################################################################
 admin_guild = 1221082935332175902
 
-channel_admin_log = 1180163473540399134
-channel_staff_log = 1180163473540399134
-channel_report_log = 1180163473540399134
+channel_admin_log = 1221094736316862464
+channel_staff_log = 1221094756608770078
+channel_report_log = 1221094777039356045
 
 bot_status_1 = f"{bot_name} - The Future"
 bot_status_2 = f"{bot_name} - Help with /help"

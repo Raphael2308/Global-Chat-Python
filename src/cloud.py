@@ -16,9 +16,11 @@ config_location = os.getenv('config_file')
 with open(config_location, 'r') as file:
     config = json.load(file)
 
-filepath = config["swear_file_path"]
+swear_word_list = config["swear_file_path"]
+emoji_list = config["emoji_file_path"]
+
 zeilen_liste = []
-with open(filepath, 'r', encoding='utf-8') as datei:
+with open(emoji_list, 'r', encoding='utf-8') as datei:
     for zeile in datei:
         zeilen_liste.append(zeile.strip())
 
@@ -27,7 +29,6 @@ with open(filepath, 'r', encoding='utf-8') as datei:
 de = pytz.timezone('Europe/Berlin')
 embed_timestamp = datetime.datetime.now(de)
 
-swear_word_list = r"C:\Users\josef\Visual Studio Code\Modifizierte\1 - Discord BOTs\Global Chat\V2\swear.txt"
 whitelist_lowercase = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
 whitelist_uppercase = [letter.upper() for letter in whitelist_lowercase]
 whitelist_numbers = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']

@@ -33,14 +33,19 @@ client.remove_command('help')
 load_dotenv()
 
 TOKEN = os.getenv('TOKEN')
+
+config_location = os.getenv('config_file')
+with open(config_location, 'r') as file:
+    config = json.load(file)
+bot_settings = config["bot_settings_file_path"]
 ##########################################################################
 
-def update_config_variable(variable_name, new_value):
+def update_settings_variable(variable_name, new_value):
     try:
-        with open('config.json', 'r') as file:
+        with open(bot_settings, 'r') as file:
             config_data = json.load(file) 
         config_data[variable_name] = new_value  
-        with open('config.json', 'w') as file:
+        with open(bot_settings, 'w') as file:
             json.dump(config_data, file, indent=2)
   
     except FileNotFoundError:
@@ -48,9 +53,9 @@ def update_config_variable(variable_name, new_value):
     except json.JSONDecodeError:
         print('Fehler beim Dekodieren der JSON-Datei.')
 
-def read_config_variable(variable_name):
+def read_settings_variable(variable_name):
     try:
-        with open('config.json', 'r') as file:
+        with open(bot_settings, 'r') as file:
             config_data = json.load(file)
         value = config_data.get(variable_name)
 
@@ -491,11 +496,11 @@ async def server_list(interaction: discord.Interaction, mode: app_commands.Choic
         try:
             await interaction.response.send_message(f"`🔌` Loading...", ephemeral=True)
             if mode.value == "true":
-                update_config_variable("chat_lock_reason", reason)
+                update_settings_variable("chat_lock_reason", reason)
             else:
-                update_config_variable("chat_lock_reason", "None")
+                update_settings_variable("chat_lock_reason", "None")
 
-            update_config_variable("chat_lock", mode.value)
+            update_settings_variable("chat_lock", mode.value)
             
             if mode.value == "true":
                 await interaction.edit_original_response(content=f"`🔒` The global chat has been successfully locked.")
@@ -684,9 +689,9 @@ async def on_message(message):
             return
     
         permission_level = get_user_permission_level(message.author.id)
-        if read_config_variable("chat_lock") == True and permission_level <4:
+        if read_settings_variable("chat_lock") == True and permission_level <4:
 
-            chat_lock_reason = read_config_variable("chat_lock_reason")
+            chat_lock_reason = read_settings_variable("chat_lock_reason")
             dm_channel = await message.author.create_dm()
 
             embed = discord.Embed(title="Chat locked", description=f"The Global Chat is currently locked. If you believe this is an error or if you want to know why the chat is locked, join the support server.", color=red_color, timestamp=embed_timestamp)
