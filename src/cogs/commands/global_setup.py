@@ -161,11 +161,6 @@ class global_setup_commands(commands.Cog):
         except Exception as e:
             await interaction.response.send_message(f"An error occurred: {e}", ephemeral=True)
 
-#    @app_commands.command(name="test", description="Test Command")
-#    async def add_global(self, interaction: discord.Interaction):
-#        await interaction.response.send_message("Hi", ephemeral=True)
-
-
 
 async def setup(client:commands.Bot) -> None:
     await client.add_cog(global_setup_commands(client))

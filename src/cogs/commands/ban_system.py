@@ -39,7 +39,6 @@ database = config["database"]
 ban_database = config["ban_database"]
 user_data_databse = config["user_data_databse"]
 ##########################################################################
-
 def connect_to_database():
     try:
         connection = mysql.connector.connect(
@@ -148,9 +147,6 @@ def get_user_permission_level(user_id):
 class ban_system(commands.Cog):
     def __init__(self, client: commands.Bot):
         self.client = client
-#    @app_commands.command(name="test", description="Test Command")
-#    async def add_global(self, interaction: discord.Interaction):
-#        await interaction.response.send_message(f"Test", ephemeral=True)
 
 
     @app_commands.command(name="ban-list", description="Outputs the list of banned users")

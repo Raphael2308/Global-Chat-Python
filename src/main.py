@@ -79,59 +79,7 @@ def update_settings_variable(variable_name, new_value):
     except json.JSONDecodeError:
         print('Fehler beim Dekodieren der JSON-Datei.')
 
-def read_settings_variable(variable_name):
-    try:
-        with open(bot_settings, 'r') as file:
-            config_data = json.load(file)
-        value = config_data.get(variable_name)
 
-
-            
-        if value is not None:
-            if value == "true" or value == "false":
-                if value == "true":
-                    return True
-                else:
-                    return False
-    
-            return value
-        else:
-            print(f'Die Variable "{variable_name}" wurde nicht gefunden.')
-            return None
-    
-    except FileNotFoundError:
-        print('Die Konfigurationsdatei wurde nicht gefunden.')
-        return None
-    except json.JSONDecodeError:
-        print('Fehler beim Dekodieren der JSON-Datei.')
-        return None
-
-##########################################################################
-
-
-##########################################################################
-
-
-
-@client.tree.command(name="help", description="A detailed and user-friendly list of all commands")
-async def help(interaction: discord.Interaction):
-    embed = discord.Embed(title="Help", description=f"All commands:", color=white_color, timestamp=embed_timestamp)
-    embed.add_field(name="Add Global", value=f"With `/add-global`, you can make the channel you are currently in a Global Chat.")
-    embed.add_field(name="Remove Global", value=f"With `/remove-global`, you can remove the Global Chat from your server.")
-    embed.set_footer(text=f"{bot_name}", icon_url=f"{bot_logo_url}")
-
-    await interaction.response.send_message(embed=embed, ephemeral=True, view=HelpButtons())
-
-
-class HelpButtons(discord.ui.View):
-    def __init__(self):
-        super().__init__(timeout=10)  # times out after 30 seconds
-        invite_bot = discord.ui.Button(label='Invite Bot', style=discord.ButtonStyle.url, url=bot_invite)
-        self.add_item(invite_bot)
-        support_server = discord.ui.Button(label='Support Server', style=discord.ButtonStyle.url, url=bot_support_server)
-        self.add_item(support_server)
-        website = discord.ui.Button(label='Website', style=discord.ButtonStyle.url, url=bot_website, disabled=True)
-        self.add_item(website)
 
 
 

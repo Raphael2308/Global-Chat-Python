@@ -41,7 +41,7 @@ class Client(commands.Bot):
         intents.message_content = True
         super().__init__(command_prefix="!", intents=intents)
         
-        self.cogslist = ["cogs.commands.global_setup", "cogs.commands.ban_system"]
+        self.cogslist = ["cogs.commands.global_setup", "cogs.commands.ban_system", "cogs.commands.info_commands"]
 
     async def setup_hook(self):
         for ext in self.cogslist:
@@ -61,4 +61,5 @@ class Client(commands.Bot):
 
 
 client = Client()
+client.remove_command('help')
 client.run(TOKEN)
