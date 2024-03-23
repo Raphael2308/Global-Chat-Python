@@ -19,7 +19,7 @@ from discord import app_commands
 
 from cloud import *
 from my_sql import *
-from config import *
+#from config import *
 
 from dotenv import load_dotenv
 
@@ -37,7 +37,33 @@ TOKEN = os.getenv('TOKEN')
 config_location = os.getenv('config_file')
 with open(config_location, 'r') as file:
     config = json.load(file)
+
+
+bot_name = config["bot_name"]
+bot_logo_url = config["bot_logo_url"]
+
+admin_guild = config["admin_guild"]
+channel_admin_log = config["channel_admin_log"]
+channel_staff_log = config["channel_staff_log"]
+channel_report_log = config["channel_report_log"]
+
+bot_invite = config["bot_invite"]
+bot_support_server =  config["bot_support_server"]
+bot_website =  config["bot_website"]
+
+standard_server_icon = config["standard_server_icon"]
+icon_announcement = config["icon_announcement"]
+icon_important = config["icon_important"]
+
 bot_settings = config["bot_settings_file_path"]
+##########################################################################
+permission_error_message = "`❌` You are not staff or your permission level is not high enough."
+bot_status_1 = f"{bot_name} - The Future"
+bot_status_2 = f"{bot_name} - Help with /help"
+bot_status_3 = f"{bot_name} -" # The Server-Count Status
+##########################################################################
+# Don't Change
+discord_url = "https://discordapp.com/users/"
 ##########################################################################
 
 def update_settings_variable(variable_name, new_value):
@@ -79,10 +105,6 @@ def read_settings_variable(variable_name):
     except json.JSONDecodeError:
         print('Fehler beim Dekodieren der JSON-Datei.')
         return None
-
-##########################################################################
-
-L = 10
 
 ##########################################################################
 
@@ -171,6 +193,7 @@ class HelpButtons(discord.ui.View):
 @app_commands.describe(amount="Specify how many servers should be displayed")
 @app_commands.choices(amount=[app_commands.Choice(name="10", value="10"), app_commands.Choice(name="20", value="20"), app_commands.Choice(name="50", value="50")])
 async def server_list(interaction: discord.Interaction, amount: app_commands.Choice[str] = None):
+    L = 10 #Length
     permission_level = get_user_permission_level(interaction.user.id)
     if permission_level is None:
         await interaction.response.send_message(f"{permission_error_message}", ephemeral=True)
