@@ -18,7 +18,6 @@ from discord.app_commands import Parameter
 from discord import app_commands
 import os
 from dotenv import load_dotenv
-from colorama import Back, Fore, Style
 
 
 ##########################################################################
