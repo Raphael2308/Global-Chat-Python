@@ -7,6 +7,8 @@ import json
 import mysql.connector
 from datetime import datetime
 import pytz
+import string
+import random
 
 import re
 from better_profanity import profanity
@@ -243,6 +245,52 @@ def add_message_id(uuid, message_id, guild_id):
 
     except Exception as e:
         print(f"Fehler beim Einfügen der Daten: {e}")
+
+def get_messages_by_uuid(uuid):
+    cursor = connection.cursor()
+
+    query = f"SELECT message_id, guild_id FROM {message_database} WHERE uuid = %s"
+    cursor.execute(query, (uuid,))
+
+    result = {message_id: guild_id for message_id, guild_id in cursor.fetchall()}
+    return result
+
+def get_servers():
+    cursor = connection.cursor(dictionary=True)
+
+    try:
+        select_query = f"SELECT guild_id, channel_id, invite FROM {database}"
+        cursor.execute(select_query)
+        
+        results = cursor.fetchall()
+
+        server_list = []
+        for result in results:
+            server_info = {
+                "guildid": result['guild_id'],
+                "channelid": result['channel_id'],
+                "invite": result['invite']
+            }
+            server_list.append(server_info)
+
+        return {"servers": server_list}
+
+    except Exception as e:
+        print(f"Fehler beim Abrufen der Daten: {e}")
+        return None
+##########################################################################
+
+def generate_random_string():
+    characters = string.ascii_letters + string.digits  # enthält Buchstaben (klein und groß) und Zahlen
+    random_string = ''.join(random.choice(characters) for _ in range(20))
+    return random_string
+
+def get_member_count(server_id, data):
+    for guild in data:
+        if guild.id == server_id:
+            return guild.member_count
+    return None
+
 ##########################################################################
 zeilen_liste = []
 with open(emoji_list, 'r', encoding='utf-8') as datei:
@@ -256,7 +304,6 @@ whitelist_special = ['Ä', 'ä', 'Ö', 'ö', 'Ü', 'ü', 'ß']
 whitelist_string = [r"'", r'"']
 
 whitelist = whitelist_lowercase + whitelist_uppercase + whitelist_numbers + whitelist_others + whitelist_special + zeilen_liste + whitelist_string
-
 ##########################################################################
 def block_links(text):
     link_regex1 = re.compile(r'(?:https?://)?[a-z0-9_\-\.]*[a-z0-9_\-]+\.[a-z]{2,}')
@@ -288,16 +335,14 @@ def filter_text(text):
         return "|"
 ##########################################################################
 
-class global_setup_commands(commands.Cog):
+class global_chat(commands.Cog):
     def __init__(self, client: commands.Bot):
         self.client = client
-    async def on_message(message):
+
+    @commands.Cog.listener("on_message")
+    async def on_message(self, message):
         if message.author.bot:
             return
-
-        bucket = global_chat_cooldown.get_bucket(message)
-        retry_after = bucket.update_rate_limit()
-
 
         content_formated = filter_text(message.content)
         conent_anti_swear = block_swear(content_formated)
@@ -329,17 +374,6 @@ class global_setup_commands(commands.Cog):
                 await message.delete()
                 return
             else:
-
-
-                if retry_after:
-                    dm_channel = await message.author.create_dm()
-
-                    embed = discord.Embed(title="Cooldown", description=f"The Global Chat bot has a cooldown of 5 seconds to prevent spam. Please wait for this duration before sending a new message.", color=int(color["red_color"], 16), timestamp=embed_timestamp)
-                    embed.set_footer(text=f"{bot_name}", icon_url=f"{bot_logo_url}")
-                    await dm_channel.send(embed=embed)
-                    await message.delete()
-                    return
-
                 if filter_text(conent) == "|":
                     reason_block = block_reason[conent]
                     dm_channel = await message.author.create_dm()
@@ -349,13 +383,25 @@ class global_setup_commands(commands.Cog):
                     await dm_channel.send(embed=embed)
                     await message.delete()
                     return
+                
+                bucket = global_chat_cooldown.get_bucket(message)
+                retry_after = bucket.update_rate_limit()
             
-                await sendAll(message)
+                if retry_after:
+                    dm_channel = await message.author.create_dm()
 
-        await client.process_commands(message)
+                    embed = discord.Embed(title="Cooldown", description=f"The Global Chat bot has a cooldown of 5 seconds to prevent spam. Please wait for this duration before sending a new message.", color=int(color["red_color"], 16), timestamp=embed_timestamp)
+                    embed.set_footer(text=f"{bot_name}", icon_url=f"{bot_logo_url}")
+                    await dm_channel.send(embed=embed)
+                    await message.delete()
+                    return
+                
+                await self.sendAll(message)
+
+        await self.client.process_commands(message)
 
 
-    async def sendAll(message: discord.Message):
+    async def sendAll(self, message: discord.Message):
         try:
             conent = f'{message.content}\n⠀'
             author = message.author
@@ -393,7 +439,7 @@ class global_setup_commands(commands.Cog):
             icon_url = standard_server_icon
             icon = message.guild.icon
 
-            data = client.guilds
+            data = self.client.guilds 
             server_members = get_member_count(message.guild.id, data)
 
             if icon:
@@ -425,11 +471,11 @@ class global_setup_commands(commands.Cog):
             await message.delete()
 
             for server in servers["servers"]:
-                guild: discord.Guild = client.get_guild(int(server["guildid"]))
+                guild: discord.Guild = self.client.get_guild(int(server["guildid"]))
                 if guild:
                     channel: discord.TextChannel = guild.get_channel(int(server["channelid"]))
                     if channel:
-                        perms: discord.Permissions = channel.permissions_for(guild.get_member(client.user.id))
+                        perms: discord.Permissions = channel.permissions_for(guild.get_member(self.client.user.id))
                         if perms.send_messages:
                             if perms.embed_links and perms.attach_files and perms.external_emojis:
                                 sent_message = await channel.send(embed=embed)
@@ -451,4 +497,4 @@ class BanButtons(discord.ui.View):
         self.add_item(website)
 
 async def setup(client:commands.Bot) -> None:
-    await client.add_cog(global_setup_commands(client))
+    await client.add_cog(global_chat(client))

@@ -40,7 +40,7 @@ class Client(commands.Bot):
         intents.message_content = True
         super().__init__(command_prefix="!", intents=intents)
         
-        self.cogslist = ["cogs.commands.global_setup", "cogs.commands.ban_system", "cogs.commands.info_commands"]
+        self.cogslist = ["cogs.commands.global_setup", "cogs.commands.ban_system", "cogs.commands.info_commands", "cogs.global_chat"]
 
     async def setup_hook(self):
         for ext in self.cogslist:
