@@ -80,3 +80,10 @@ The tables named database, message_database, etc., are specified in the setup.py
   "icon_important": ""
 }
 ```
+
+### 2.3 Installing all needed libraries
+
+Finally, you need to install all the required libraries. If you have a Pterodactyl server, click on `Server > Startup > Additional Python Packages`, and add the following there:
+`discord.py pytz colorama`
+
+If you have a different server, you need to enter `pip install <library>` for each library in the console.
