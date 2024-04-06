@@ -45,3 +45,38 @@ database_user = admin
 database_passwd = pasword1234
 database_database = globalchat
 ```
+
+### 2.2 Setup of the config.json file
+
+Next, the config.json will be edited. To do this, open the file ./src/config.json.example and fill in all the information. IMPORTANT: Since it is a JSON file, you need to remove the comments, which means everything following a #.
+The tables named database, message_database, etc., are specified in the setup.py file. The fields icon_announcement and icon_important are not needed. Here is an example of a config.json:
+
+```json
+{
+  "swear_file_path": "./src/swear.txt",
+  "bot_settings_file_path": "./src/bot_settings.json",
+  "emoji_file_path": "./src/emoji.txt",
+  "color_file_path": "./src/color.json",
+
+  "database": "server_list",
+  "message_database": "message_ids",
+  "user_data_databse": "user_data",
+  "ban_database": "ban_list",
+
+  "bot_name": "Global Chat",
+  "bot_logo_url": "https://raw.githubusercontent.com/Blackstonecoden/Global-Chat/main/LOGO.png",
+
+  "admin_guild": 1821182535732195922,
+  "channel_admin_log": 1226092732317868944,
+  "channel_staff_log": 1921092252608670088,
+  "channel_report_log": 12067942277033260245,
+
+  "bot_invite": "https://discord.com/api/oauth2/authorize?client_id=1177590897152622672&permissions=1101659499601&scope=bot%20applications.commands",
+  "bot_support_server": "https://discord.gg/FVQxgBysA7",
+  "bot_website": "https://www.discord.com",
+
+  "standard_server_icon": "hhttps://raw.githubusercontent.com/Blackstonecoden/Global-Chat/main/BLANK_ICON.jpg",
+  "icon_announcement": "",
+  "icon_important": ""
+}
+```
