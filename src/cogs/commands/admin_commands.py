@@ -395,7 +395,7 @@ class admin_commands(commands.Cog):
     @app_commands.describe(reason="Specify the reason for the chat lock")
     @app_commands.default_permissions(administrator=True)
     @app_commands.choices(mode=[app_commands.Choice(name="On", value="true"), app_commands.Choice(name="Off", value="false")])
-    async def server_list(self, interaction: discord.Interaction, mode: app_commands.Choice[str], reason: str = "No reason given"):
+    async def chat_lock(self, interaction: discord.Interaction, mode: app_commands.Choice[str], reason: str = "No reason given"):
         permission_level = get_user_permission_level(interaction.user.id)
         if permission_level is None:
             await interaction.response.send_message(f"{permission_error_message}", ephemeral=True)
