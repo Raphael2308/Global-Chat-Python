@@ -87,3 +87,13 @@ Finally, you need to install all the required libraries. If you have a Pterodact
 `discord.py pytz colorama`
 
 If you have a different server, you need to enter `pip install <library>` for each library in the console.
+
+## 3. Final setup
+
+### 3.1 Database setup
+
+The last thing that needs to be set up now is the database. Navigate to `./src/setup.py` and edit the `admin_user` variable. This user will have admin privileges and can change the roles and permission level of other users on Discord using /set-role. Execute the file. After that, it will no longer be needed. However, you can keep it in case you lose access to the BOT and need to set a new admin user.
+
+### 3.2 BOT startup
+
+Now you can start the BOT. Make sure you have completed all the preceding steps. If you're using Pterodactyl, go to your `Server > Startup > Bot Py File` and add `./src/bot.py` there. The BOT should now start without any errors. If there are any issues, feel free to join our [Discord](https://discord.gg/FVQxgBysA7) server and request assistance there.
