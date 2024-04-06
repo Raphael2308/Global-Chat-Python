@@ -40,7 +40,7 @@ class Client(commands.Bot):
         intents.message_content = True
         super().__init__(command_prefix="!", intents=intents)
         
-        self.cogslist = ["cogs.commands.global_setup", "cogs.commands.ban_system", "cogs.commands.info_commands", "cogs.commands.admin_commands","cogs.global_chat"]
+        self.cogslist = ["cogs.commands.global_setup", "cogs.commands.ban_system", "cogs.commands.info_commands", "cogs.commands.admin_commands","cogs.commands.report_commands","cogs.global_chat"]
 
     async def setup_hook(self):
         for ext in self.cogslist:
@@ -59,6 +59,16 @@ class Client(commands.Bot):
         print(prfx + " Slash CMDs Synced " + Fore.BLUE + str(len(synced)) + " Commands")
 
 
+
+
+
 client = Client()
 client.remove_command('help')
+
+async def on_tree_error(interaction: discord.Interaction, error: app_commands.AppCommandError):
+    if isinstance(error, app_commands.CommandOnCooldown):
+        await interaction.response.send_message(f"`⌛` Cooldown. Please retry in **{round(error.retry_after, 1)}** seconds.", ephemeral=True)
+#            await interaction.response.send_message(str(error), ephemeral=True)
+client.tree.on_error = on_tree_error
+
 client.run(TOKEN)

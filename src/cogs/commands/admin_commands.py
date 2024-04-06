@@ -265,10 +265,9 @@ def merge_ids(message_ids_and_guild_ids):
 class admin_commands(commands.Cog):
     def __init__(self, client: commands.Bot):
         self.client = client
-    @app_commands.command(name="test", description="Test Command")
-    async def add_global(self, interaction: discord.Interaction):
-        await interaction.response.send_message(f"Test", ephemeral=True)
 
+        self.ctx_menu = app_commands.ContextMenu(name='Delete Message', callback=self.remove_message)
+        self.client.tree.add_command(self.ctx_menu) 
 
 
     @app_commands.command(name="staff-list", description="Outputs the list of all staff members")
@@ -440,8 +439,7 @@ class admin_commands(commands.Cog):
                     return                
                 data_messages = get_messages_by_uuid(uuid)
                 merged_ids = merge_ids(data_messages)
-                print(merged_ids)
-                servers = await self.delete_messages(merged_ids)
+                servers = await delete_messages(self, merged_ids)
                 await interaction.edit_original_response(content=f"`✅` Message deleted on `{servers}` servers.")
             except:
                 await interaction.edit_original_response(content=f"`❌` An error occurred while deleting the message.")
@@ -449,40 +447,34 @@ class admin_commands(commands.Cog):
         else:
             await interaction.response.send_message(f"{permission_error_message}", ephemeral=True)
 
-    async def delete_messages(self, merged_ids):
-        try:
-            number = 0
-            for guild_id, message_info in merged_ids.items():
-                result = await self.delete_message(guild_id, message_info['channel_id'], message_info['message_id'])
-                number = number + 1
-            return number
-        except Exception as e:
-            return f"{e}"
 
 
-    async def delete_message(self, guild_id, channel_id, message_id):
-        try:
-            guild = self.client.get_guild(int(guild_id))
 
-            if guild:
-                channel = guild.get_channel(int(channel_id))
+#    @app_commands.context_menu(name="Delete Message")
+    @app_commands.default_permissions(manage_messages=True)
+    async def remove_message(self, interaction: discord.Interaction, message: discord.Message):
+        permission_level = get_user_permission_level(interaction.user.id)
+        if permission_level is None:
+            await interaction.response.send_message(f"{permission_error_message}", ephemeral=True)
+            return    
+        if permission_level >= 4:
+            try:            
+                await interaction.response.send_message(f"`🔌` Loading...", ephemeral=True)
+                uuid = get_uuid_from_message_id(str(message.id))
+                if uuid == None:
+                    await interaction.edit_original_response(content=f"`❌` Error: The message could not be deleted because it is not in the database.")
+                    return                
+                data_messages = get_messages_by_uuid(uuid)
+                merged_ids = merge_ids(data_messages)
+                servers = await delete_messages(self, merged_ids)
+                await interaction.edit_original_response(content=f"`✅` Message deleted on `{servers}` servers.")
+            except:
+                await interaction.edit_original_response(content=f"`❌` An error occurred while deleting the message.")
 
-                if channel:
-                    try:
-                        # Lösche die Nachricht mit der angegebenen ID
-                        message = await channel.fetch_message(int(message_id))
-                        await message.delete()
-                        return (f'Message {message_id} deleted successfully.')
-                    except discord.NotFound:
-                        return (f'Message {message_id} not found.')
-                    except discord.Forbidden:
-                        return (f'Bot has no permission to delete messages in {channel.name}.')
-                else:
-                    return (f'Channel with ID {channel_id} not found in the guild.')
-            else:
-                return (f'Guild with ID {guild_id} not found.')
-        except Exception as e:
-            return f"{e}"
+        else:
+            await interaction.response.send_message(f"{permission_error_message}", ephemeral=True)
+
+
         
     @app_commands.command(name="server-list", description="Outputs the list of banned users")
     @app_commands.guilds(admin_guild)
@@ -524,6 +516,40 @@ class admin_commands(commands.Cog):
             await interaction.response.send_message(f"{permission_error_message}", ephemeral=True)
 
 
+async def delete_messages(self, merged_ids):
+    try:
+        number = 0
+        for guild_id, message_info in merged_ids.items():
+            result = await delete_message(self, guild_id, message_info['channel_id'], message_info['message_id'])
+            number = number + 1
+        return number
+    except Exception as e:
+        return f"{e}"
+
+
+async def delete_message(self, guild_id, channel_id, message_id):
+    try:
+        guild = self.client.get_guild(int(guild_id))
+
+        if guild:
+            channel = guild.get_channel(int(channel_id))
+
+            if channel:
+                try:
+                    # Lösche die Nachricht mit der angegebenen ID
+                    message = await channel.fetch_message(int(message_id))
+                    await message.delete()
+                    return (f'Message {message_id} deleted successfully.')
+                except discord.NotFound:
+                    return (f'Message {message_id} not found.')
+                except discord.Forbidden:
+                    return (f'Bot has no permission to delete messages in {channel.name}.')
+            else:
+                return (f'Channel with ID {channel_id} not found in the guild.')
+        else:
+            return (f'Guild with ID {guild_id} not found.')
+    except Exception as e:
+        return f"{e}"
 
 class Pagination(discord.ui.View):
     def __init__(self, interaction: discord.Interaction, get_page: Callable):
