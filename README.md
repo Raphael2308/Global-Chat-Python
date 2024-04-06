@@ -29,7 +29,7 @@ If you want to create your own Global Chat BOT, follow these steps. I will demon
 
 Click on 'Code' at the top, download as ZIP. On your server panel, create a new server and upload the ZIP file into the root directory. Extract it, and delete the ZIP file. In the directory, there should now be 4 files: `.env.example`, `README.md`, `.gitignore`, `LICENSE.md`, and a folder named `src`. You can delete all files except .env.example and the src folder.
 
-## 2. Setup the config files
+## 2. Setup the config files and libraries
 
 ### 2.1 Setup of the .env file
 
@@ -48,8 +48,7 @@ database_database = globalchat
 
 ### 2.2 Setup of the config.json file
 
-Next, the config.json will be edited. To do this, open the file `./src/config.json.example` and fill in all the information. IMPORTANT: Since it is a JSON file, you need to remove the comments, which means everything following a #.
-The tables named database, message_database, etc., are specified in the setup.py file. The fields icon_announcement and icon_important are not needed. Now rename the file to `config.json`. Here is an example of a config.json:
+Next, the config.json will be edited. To do this, open the file `./src/config.json.example` and fill in all the information. IMPORTANT: Since it is a JSON file, you need to remove the comments, which means everything following a #. The tables named database, message_database, etc., are specified in the setup.py file. The fields icon_announcement and icon_important are not needed. Now rename the file to `config.json`. Here is an example of a config.json:
 
 ```json
 {
@@ -83,8 +82,7 @@ The tables named database, message_database, etc., are specified in the setup.py
 
 ### 2.3 Installing all needed libraries
 
-Finally, you need to install all the required libraries. If you have a Pterodactyl server, click on `Server > Startup > Additional Python Packages`, and add the following there:
-`discord.py pytz colorama`
+Finally, you need to install all the required libraries. If you have a Pterodactyl server, click on `Server > Startup > Additional Python Packages`, and add the following there: `discord.py pytz colorama`
 
 If you have a different server, you need to enter `pip install <library>` for each library in the console.
 
