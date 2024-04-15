@@ -13,7 +13,7 @@ from typing import Union
 load_dotenv()
 config_location = os.getenv('config_location')
 config_location = os.getenv('config_file')
-with open(config_location, 'r') as file:
+with open(config_location, 'r', encoding='utf-8') as file:
     config = json.load(file)
 ##########################################################################
 permission_error_message = "`❌` You are not staff or your permission level is not high enough."

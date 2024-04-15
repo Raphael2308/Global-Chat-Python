@@ -63,6 +63,7 @@ Next, the config.json will be edited. To do this, open the file `./src/config.js
   "ban_database": "ban_list",
 
   "bot_name": "Global Chat",
+  "bot_status": "Is Global",
   "bot_logo_url": "https://raw.githubusercontent.com/Blackstonecoden/Global-Chat/main/LOGO.png",
 
   "admin_guild": 1821182535732195922,

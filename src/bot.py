@@ -26,10 +26,11 @@ load_dotenv()
 TOKEN = os.getenv('TOKEN')
 
 config_location = os.getenv('config_file')
-with open(config_location, 'r') as file:
+with open(config_location, 'r', encoding='utf-8') as file:
     config = json.load(file)
 
 admin_guild = config["admin_guild"]
+bot_status = config["bot_status"]
 ##########################################################################
 def clear_console():
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -57,6 +58,7 @@ class Client(commands.Bot):
         print(prfx + " Guild-Only Slash CMDs Synced " + Fore.BLUE + str(len(guild_only)) + " Commands")
         synced = await self.tree.sync()
         print(prfx + " Slash CMDs Synced " + Fore.BLUE + str(len(synced)) + " Commands")
+        await client.change_presence(activity = discord.CustomActivity(name=bot_status))
 
 
 

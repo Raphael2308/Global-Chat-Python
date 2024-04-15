@@ -11,7 +11,7 @@ import pytz
 load_dotenv()
 config_location = os.getenv('config_location')
 config_location = os.getenv('config_file')
-with open(config_location, 'r') as file:
+with open(config_location, 'r', encoding='utf-8') as file:
     config = json.load(file)
 color_location = config["color_file_path"]
 with open(color_location, 'r') as file:

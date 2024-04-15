@@ -11,7 +11,7 @@ import pytz
 load_dotenv()
 config_location = os.getenv('config_location')
 config_location = os.getenv('config_file')
-with open(config_location, 'r') as file:
+with open(config_location, 'r', encoding='utf-8') as file:
     config = json.load(file)
 bot_name = config["bot_name"]
 bot_logo_url = config["bot_logo_url"]

@@ -14,6 +14,7 @@
 
 
     "bot_name": "", # The name of the Bot
+    "bot_status": "", # Custom BOT Status
     "bot_logo_url": "", # PNG file of the Bot avatar / Logo
 
     "admin_guild": , # The admin guild server, where commands like /ban-use or /set-role user can be run (has to be an intiger)
