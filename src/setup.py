@@ -1,8 +1,8 @@
 #THIS IS A SETUP FILE. RUN IT ONLY ONCE AND CONFIGURE THE .ENV FIRST. IT WILL SETUP THE DATABASE
-admin_user =  1234 #Enter user ID of the user who should get admin perms (can be changed later with bot commands)
+admin_user =  12345 #Enter user ID of the user who should get admin perms (can be changed later with bot commands)
 
 # The name of the tables. Recommended to not change. If you wan't to change it, change it in config.json too
-database = "server_list_test"
+database = "server_list"
 message_database = "message_ids"
 user_data_databse = "user_data"
 ban_database = "ban_list"
@@ -11,6 +11,7 @@ import os
 import json
 import mysql.connector
 from dotenv import load_dotenv
+from datetime import datetime
 
 #  Getting the database cridentials to create the tables
 load_dotenv()
@@ -79,3 +80,10 @@ CREATE TABLE `{ban_database}` (
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
 """)
+
+# Add the admin user
+created_at = datetime.now()
+query = f"INSERT INTO {user_data_databse} (user_id, role, permission_level, created_at) VALUES (%s, %s, %s, %s)"
+data = (admin_user, "developer", 100, created_at)
+cursor.execute(query, data)
+connection.commit()
