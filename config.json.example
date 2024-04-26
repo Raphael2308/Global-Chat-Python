@@ -2,8 +2,9 @@
 {
     "", # Location of the swear file. Mostly in ./swear.txt
     "bot_settings_file_path":"", # Location of the Bot-Settings file. Mostly in ./bot_settings.json
-    "emoji_file_path":"", # Location of the emoji file. Mostly in ./emoji.txt
-    "color_file_path": "", # Location of the embed color file. Mostly in ./color.txt
+    "emoji_file_path":"", # Location of the emoji file. Mostly in ./src/emoji.txt
+    "color_file_path": "", # Location of the embed color file. Mostly in ./src/color.txt
+    "roles_file_path": "", # Location of the roles file. Mostly in ./src/roles.json
     
     "database":"", # Table name of the server_list (look in setup.py)
     "message_database": "", # Table name of the message_id_list (look in setup.py)

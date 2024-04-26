@@ -22,6 +22,16 @@ color_location = config["color_file_path"]
 with open(color_location, 'r') as file:
     color = json.load(file)
 
+role_location = config["roles_file_path"]
+with open(role_location, 'r') as file:
+    roles = json.load(file)
+
+role_prefix = {}
+role_color = {}
+for role, info in roles.items():
+    role_prefix[role] = f"{info['display_name']}"
+    role_color[role] = int(info["color"], 16)
+
 de = pytz.timezone('Europe/Berlin')
 embed_timestamp = datetime.now(de)
 ##########################################################################
@@ -44,6 +54,8 @@ database = config["database"]
 ban_database = config["ban_database"]
 user_data_databse = config["user_data_databse"]
 message_database =  config["message_database"]
+
+role_choices = [app_commands.Choice(name=info["name"], value=role) for role, info in roles.items()]
 ##########################################################################
 def update_settings_variable(variable_name, new_value):
     try:
@@ -142,54 +154,22 @@ def load_data():
 
 def list_staff_members():
     data = load_data()
-    role_prefix_function = {
-  "developer": "<:developer:1177680732966101133> Developers",
-  "admin": "<:admin:1177681171103096862> Admins",
-  "moderator": "<:moderator:1177682704830050444>  Moderators",
-  "partner": "<:partner:1179864775761604728>  Partners",
-}
-    staff_dict = {"developer": [], "admin": [], "moderator": [], "partner": []}
+    staff_dict = {role: [] for role in roles if role != "default"}
 
     for entry in data:
         user_id = entry["user_id"]
         role = entry["role"]
-        if role == "developer":
-            staff_dict["developer"].append(f"- <@{user_id}>")
-        elif role == "admin":
-            staff_dict["admin"].append(f"- <@{user_id}>")
-        elif role == "moderator":
-            staff_dict["moderator"].append(f"- <@{user_id}>")
-        elif role == "partner":
-            staff_dict["partner"].append(f"- <@{user_id}>")
-
+        if role in staff_dict:
+            staff_dict[role].append(f"- <@{user_id}>")
+        
     formatted_text = ""
     for role, members in staff_dict.items():
         if members:
-            formatted_text += f"\n{role_prefix_function[role]} - {len(members)}\n"
+            formatted_text += f"\n{role_prefix.get(role, '')} - {len(members)}\n"
             formatted_text += "\n".join(members) + "\n"
 
     return formatted_text
 
-def list_vips():
-    data = load_data()
-    role_prefix_function = {
-        "vip": "<:vip:1177945496401223751> VIPs",
-    }
-    vips_list = {"vip": []}
-
-    for entry in data:
-        user_id = entry["user_id"]
-        role = entry["role"]
-        if role == "vip":
-            vips_list["vip"].append(f"- <@{user_id}>")
-
-    formatted_text = ""
-    for role, members in vips_list.items():
-        if members:
-            formatted_text += f"\n{role_prefix_function[role]} - {len(members)}\n"
-            formatted_text += "\n".join(members) + "\n"
-
-    return formatted_text
 
 def add_user(user_id, role, permission_level):
     try:
@@ -301,8 +281,9 @@ class admin_commands(commands.Cog):
             return  
         if permission_level >= 4:
             formatted_text = list_staff_members()
-            formatted_vips = list_vips()
-            embed = discord.Embed(title=f"Staff list", description=f"That's a list of all current staff members and VIPs.\n{formatted_text}\n⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯\n{formatted_vips}", color=int(color["white_color"], 16), timestamp=embed_timestamp)
+#            formatted_vips = list_vips()
+#            embed = discord.Embed(title=f"Staff list", description=f"That's a list of all current staff members.\n{formatted_text}\n⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯\n{formatted_vips}", color=int(color["white_color"], 16), timestamp=embed_timestamp)
+            embed = discord.Embed(title=f"Staff list", description=f"That's a list of all current staff members.\n{formatted_text}", color=int(color["white_color"], 16), timestamp=embed_timestamp)
             embed.set_footer(text=f"{bot_name}", icon_url=f"{bot_logo_url}")
             await interaction.response.send_message(embed=embed, ephemeral=True)
         else:
@@ -314,7 +295,7 @@ class admin_commands(commands.Cog):
     @app_commands.describe(userid="Enter the User ID of the user")
     @app_commands.describe(role="Enter the role that the user should receive")
     @app_commands.describe(permission_level="Specify the permission level that the user should receive")
-    @app_commands.choices(role=[app_commands.Choice(name="default", value="default"), app_commands.Choice(name="VIP", value="vip"), app_commands.Choice(name="Partner", value="partner"),app_commands.Choice(name="Moderator", value="moderator"), app_commands.Choice(name="Admin", value="admin"), app_commands.Choice(name="Developer", value="developer")])
+    @app_commands.choices(role=role_choices)
     async def set_role(self, interaction: discord.Interaction, userid: Union[discord.Member, discord.User], role: app_commands.Choice[str] = None, permission_level: int = None):
         permission = get_user_permission_level(interaction.user.id)
         if permission is None:

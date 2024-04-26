@@ -29,8 +29,18 @@ swear_word_list = config["swear_file_path"]
 emoji_list = config["emoji_file_path"]
 color_location = config["color_file_path"]
 bot_settings = config["bot_settings_file_path"]
+role_location = config["roles_file_path"]
 with open(color_location, 'r') as file:
     color = json.load(file)
+
+with open(role_location, 'r') as file:
+    roles = json.load(file)
+
+role_prefix = {}
+role_color = {}
+for role, info in roles.items():
+    role_prefix[role] = f"{info['display_name']}"
+    role_color[role] = int(info["color"], 16)
 
 de = pytz.timezone('Europe/Berlin')
 embed_timestamp = datetime.now(de)
@@ -42,22 +52,9 @@ block_reason = {
     "||": "Swear word blocked",
     "|||": "Link blocked"
 }
-role_prefix = {
-  "developer": "<:developer:1177680732966101133>  DEV",
-  "admin": "<:admin:1177681171103096862>  Admin",
-  "moderator": "<:moderator:1177682704830050444>  MOD",
-  "partner": "<:partner:1179864775761604728>  Partner",
-  "vip": "<:vip:1177945496401223751>  VIP",
-  "default": ""
-}
-role_color = {
-  "developer": 0x5865f2,
-  "admin": 0xf54651,
-  "moderator": 0xfc964b,
-  "partner": 0x4dbc62,
-  "vip": 0xfbb848,
-  "default": 0xffffff
-}
+
+
+
 discord_url = "https://discordapp.com/users/"
 ##########################################################################
 database_host = os.getenv('database_host')

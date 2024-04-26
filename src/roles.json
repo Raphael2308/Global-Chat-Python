@@ -1,0 +1,32 @@
+{
+  "developer": {
+    "name": "Developer",
+    "display_name": "<:developer:1233439646042554440> DEV",
+    "color": "0x5865f2"
+  },
+  "admin": {
+    "name": "Admin",
+    "display_name": "<:admin:1233439644394192986> Admin",
+    "color": "0xf54651"
+  },
+  "moderator": {
+    "name": "Moderator",
+    "display_name": "<:moderator:1233439647372279838> MOD",
+    "color": "0xfc964b"
+  },
+  "partner": {
+    "name": "Partner",
+    "display_name": "<:partner:1233439648819183708> Partner",
+    "color": "0x4dbc62"
+  },
+  "vip": {
+    "name": "Vip",
+    "display_name": "<:vip:1233439650433990777> VIP",
+    "color": "0xfbb848"
+  },
+  "default": {
+    "name": "Default",
+    "display_name": "",
+    "color": "0xffffff"
+  }
+}
