@@ -52,21 +52,27 @@ connection = connect_to_database()
 def guild_exists(server_id):
     try:
         cursor = connection.cursor()
+
         query = f"SELECT * FROM `{database}` WHERE `guild_id` = %s"
         data = (server_id,)
         cursor.execute(query, data)
 
         result = cursor.fetchone()
+
+        connection.commit()
+        cursor.close()
         if result:
             return True
         else:
             return False
+
 
     except Exception as e:
         return f"{e}"
 
 def add_guild(server_id, channel_id, invite):
     cursor = connection.cursor()
+
     current_datetime = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
     insert_query = f"""
@@ -77,7 +83,9 @@ def add_guild(server_id, channel_id, invite):
     data = (server_id, channel_id, invite, current_datetime)
     try:
         cursor.execute(insert_query, data)
+        
         connection.commit()
+        cursor.close()
 
 
     except Exception as e:
@@ -92,6 +100,7 @@ def remove_guild(guild_id):
     try:
         cursor.execute(delete_query, (guild_id,))
         connection.commit()
+        cursor.close()
 
 
     except Exception as e:

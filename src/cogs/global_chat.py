@@ -115,6 +115,7 @@ def connect_to_database():
 
 connection = connect_to_database()
 
+
 def get_globalchat(guild_id, channel_id=None):
     cursor = connection.cursor(dictionary=True)
 
@@ -122,6 +123,10 @@ def get_globalchat(guild_id, channel_id=None):
         select_query = f"SELECT channel_id, invite FROM {database} WHERE guild_id = %s"
         cursor.execute(select_query, (guild_id,))
         result = cursor.fetchone()
+
+        connection.commit()
+        cursor.close()
+
 
         if result:
             if str(channel_id) == str(result['channel_id']):
@@ -142,6 +147,10 @@ def is_user_in_data(user_id):
         cursor.execute(query, (user_id,))
 
         result = cursor.fetchone()
+
+        connection.commit()
+        cursor.close()
+
         return result['count'] > 0
 
     except mysql.connector.Error as err:
@@ -155,6 +164,10 @@ def get_user_role(user_id):
         cursor.execute(query, (user_id,))
 
         result = cursor.fetchone()
+
+        connection.commit()
+        cursor.close()
+
         if result:
             return result['role']
         else:
@@ -169,8 +182,11 @@ def get_uuid_from_message_id(message_id):
         query = f"SELECT uuid FROM {message_database} WHERE message_id = %s"
         cursor.execute(query, (message_id,))
 
-
         result = cursor.fetchone()
+
+        connection.commit()
+        cursor.close()
+
         if result:
             return result['uuid']
         else:
@@ -188,6 +204,9 @@ def is_user_banned(user_id):
 
         result = cursor.fetchone()
 
+        connection.commit()
+        cursor.close()
+
         return result['count'] > 0
 
     except mysql.connector.Error as err:
@@ -201,6 +220,9 @@ def get_ban_reason(user_id):
         cursor.execute(query, (user_id,))
 
         result = cursor.fetchone()
+
+        connection.commit()
+        cursor.close()
 
         if result:
             ban_reason = result[0]
@@ -219,6 +241,9 @@ def get_user_permission_level(user_id):
         cursor.execute(query, (user_id,))
 
         result = cursor.fetchone()
+
+        connection.commit()
+        cursor.close()
         if result:
             return int(result['permission_level'])
         else:
@@ -242,6 +267,8 @@ def add_message_id(uuid, message_id, guild_id):
         cursor.execute(insert_query, data)
         connection.commit()
 
+        connection.commit()
+        cursor.close()
 
     except Exception as e:
         print(f"Fehler beim Einfügen der Daten: {e}")
@@ -253,6 +280,10 @@ def get_messages_by_uuid(uuid):
     cursor.execute(query, (uuid,))
 
     result = {message_id: guild_id for message_id, guild_id in cursor.fetchall()}
+
+    connection.commit()
+    cursor.close()
+
     return result
 
 def get_servers():
@@ -272,6 +303,10 @@ def get_servers():
                 "invite": result['invite']
             }
             server_list.append(server_info)
+
+        connection.commit()
+        cursor.close()
+        
 
         return {"servers": server_list}
 

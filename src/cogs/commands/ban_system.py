@@ -64,6 +64,9 @@ def load_banned_users():
         result = cursor.fetchall()
         output_data = [{'id': row['user_id'], 'reason': row['reason']} for row in result]
 
+        connection.commit()
+        cursor.close()
+
         return output_data
 
     except mysql.connector.Error as err:
@@ -79,7 +82,9 @@ def ban_user_command(user_id, reason):
             data = (user_id, reason, created_at)
 
             cursor.execute(query, data)
+
             connection.commit()
+            cursor.close()
 
     except Exception as e:
         print(f"Fehler beim Hinzufügen des Benutzers: {e}")
@@ -93,7 +98,10 @@ def unban_user_command(user_id):
             data = (user_id,)
 
             cursor.execute(query, data)
+
             connection.commit()
+            cursor.close()
+
     except Exception as e:
         print(f"Fehler beim Entfernen des Benutzers: {e}")
 
@@ -104,6 +112,9 @@ def is_user_banned(user_id):
         cursor.execute(query, (user_id,))
 
         result = cursor.fetchone()
+
+        connection.commit()
+        cursor.close()
 
         return result['count'] > 0
 
@@ -136,6 +147,10 @@ def get_user_permission_level(user_id):
         cursor.execute(query, (user_id,))
 
         result = cursor.fetchone()
+
+        connection.commit()
+        cursor.close()
+        
         if result:
             return int(result['permission_level'])
         else:

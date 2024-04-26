@@ -79,7 +79,9 @@ def clear_table(table_name):
         cursor = connection.cursor()
         sql_query = f"DELETE FROM {table_name}"
         cursor.execute(sql_query)
+
         connection.commit()
+        cursor.close()
     except Exception as e:
         return (f'Fehler beim Leeren der Tabelle {table_name}: {str(e)}')
 
@@ -92,6 +94,9 @@ def get_user_permission_level(user_id):
         cursor.execute(query, (user_id,))
 
         result = cursor.fetchone()
+
+        connection.commit()
+        cursor.close()
         if result:
             return int(result['permission_level'])
         else:
@@ -108,6 +113,9 @@ def guild_exists(server_id):
         cursor.execute(query, data)
 
         result = cursor.fetchone()
+
+        connection.commit()
+        cursor.close()
         if result:
             return True
         else:
@@ -125,6 +133,8 @@ def load_data():
         result = cursor.fetchall()
         output_data = [{'user_id': row['user_id'], 'role': row['role'], 'permission_level': row['permission_level']} for row in result]
 
+        connection.commit()
+        cursor.close()
         return output_data
 
     except mysql.connector.Error as err:
@@ -192,6 +202,7 @@ def add_user(user_id, role, permission_level):
 
             cursor.execute(query, data)
             connection.commit()
+            cursor.close()
 
 
     except Exception as e:
@@ -208,6 +219,7 @@ def remove_user(user_id):
 
             cursor.execute(query, data)
             connection.commit()
+            cursor.close()
 
     except Exception as e:
         print(f"Fehler beim Entfernen des Benutzers: {e}")
@@ -220,6 +232,9 @@ def get_uuid_from_message_id(message_id):
 
 
         result = cursor.fetchone()
+
+        connection.commit()
+        cursor.close()
         if result:
             return result['uuid']
         else:
@@ -236,6 +251,9 @@ def get_channel_id_by_guild_id(server_id):
 
     result = cursor.fetchone()
 
+    connection.commit()
+    cursor.close()
+
     if result:
         channel_id = result[0]
         return channel_id
@@ -249,6 +267,9 @@ def get_messages_by_uuid(uuid):
     cursor.execute(query, (uuid,))
 
     result = {message_id: guild_id for message_id, guild_id in cursor.fetchall()}
+
+    connection.commit()
+    cursor.close()
     return result
 
 def merge_ids(message_ids_and_guild_ids):
