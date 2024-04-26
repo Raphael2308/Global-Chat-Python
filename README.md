@@ -75,10 +75,30 @@ Next, the config.json will be edited. To do this, open the file `./config.json.e
   "bot_support_server": "https://discord.gg/FVQxgBysA7",
   "bot_website": "https://www.discord.com",
 
-  "standard_server_icon": "hhttps://raw.githubusercontent.com/Blackstonecoden/Global-Chat/main/BLANK_ICON.jpg",
-  "icon_announcement": "",
-  "icon_important": ""
+  "standard_server_icon": "hhttps://raw.githubusercontent.com/Blackstonecoden/Global-Chat/main/BLANK_ICON.jpg"
 }
+```
+
+Explaination:
+
+```
+database: Name of the tables
+
+bot_name: Name of the BOT
+
+bot_status: Custom status. Emojis can be used
+bot_logo_url: The logo / profile pictutre of the bot
+
+admin_guild: The admin guild server, where commands like /ban-use or /set-role user can be run (has to be an integer)
+channel_admin_log: The log channel where bans are logged (integer)
+channe_staff_log: The channel where staff-chanes are logged (with /set-role) (integer)
+channel_report_log: The channel where reports are logged (integer)
+
+bot_invite: Invite of the bot. Example: https://discord.com/api/oauth2/authorize?client_id=<YOUR_BOT_ID>&permissions=1101659499601&scope=bot%20applications.commands
+bot_support_server: Invite to the support server https://discord.gg/<CODE>
+bot_website: Bot website
+
+standard_server_icon: Icon used for servers with no server icon. You don't have to change it
 ```
 
 ### 2.3 Installing all needed libraries
@@ -91,19 +111,7 @@ If you have a different server, you need to enter `pip install <library>` for ea
 
 ## 3.1 Emoji setup
 
-To make the role emojis work in the Global Chat, you need to set up specific emojis. First, you need a Discord server, typically the bot support server, where the Bot resides. Then, create 5 emojis, one for each role: Developer, Admin, Moderator, Partner, VIP. Upload these emojis in the Discord server settings, so they should be available in this server. Next, go to a channel and type a backslash, then click on the emoji menu and select the specific role emoji. The message should look like "\:emoji_name:". Send this message. Now the message should look like: `<:admin:1177681171103096862>`. Copy that and paste it into ./src/cogs/global_chat.py at line ~47. Do this for all role icons.
-The final result should look something like this:
-
-```py
-role_prefix = {
-  "developer": "<:developer:1177680732966101133>  DEV",
-  "admin": "<:admin:1177681171103096862>  Admin",
-  "moderator": "<:moderator:1177682704830050444>  MOD",
-  "partner": "<:partner:1179864775761604728>  Partner",
-  "vip": "<:vip:1177945496401223751>  VIP",
-  "default": ""
-}
-```
+To make the role emojis work in the Global Chat, you need to set up specific emojis. First, you need a Discord server, typically the bot support server, where the Bot resides. Then, create 5 emojis, one for each role: Developer, Admin, Moderator, Partner, VIP. Upload these emojis in the Discord server settings, so they should be available in this server. Next, go to a channel and type a backslash, then click on the emoji menu and select the specific role emoji. The message should look like "\:emoji_name:". Send this message. Now the message should look like: `<:admin:1177681171103096862>`. Copy and paste the following into `./src/roles.json`. Do this for each role individually.
 
 ## 4. Final setup
 

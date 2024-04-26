@@ -1,35 +1,32 @@
-# NOTE REMOVE ALL THE COMMENTS that start with #
 {
-    "", # Location of the swear file. Mostly in ./swear.txt
-    "bot_settings_file_path":"", # Location of the Bot-Settings file. Mostly in ./bot_settings.json
-    "emoji_file_path":"", # Location of the emoji file. Mostly in ./src/emoji.txt
-    "color_file_path": "", # Location of the embed color file. Mostly in ./src/color.txt
-    "roles_file_path": "", # Location of the roles file. Mostly in ./src/roles.json
+    "./src/swear.txt", 
+    "bot_settings_file_path":"./src/bot_settings.json", 
+    "emoji_file_path":"./src/emoji.txt",
+    "color_file_path": "./src/color.json",
+    "roles_file_path": "./src/roles.json",
     
-    "database":"", # Table name of the server_list (look in setup.py)
-    "message_database": "", # Table name of the message_id_list (look in setup.py)
-    "user_data_databse":"", # Table name of the user_roles (look in setup.py)
-    "ban_database":"b", # Table name of banned usere (look in setup.py)
+    "database":"server_list",
+    "message_database": "message_ids",
+    "user_data_databse":"user_data",
+    "ban_database":"ban_list", 
 
 
 
 
-    "bot_name": "", # The name of the Bot
-    "bot_status": "", # Custom BOT Status
-    "bot_logo_url": "", # PNG file of the Bot avatar / Logo
+    "bot_name": "",
+    "bot_status": "",
+    "bot_logo_url": "",
 
-    "admin_guild": , # The admin guild server, where commands like /ban-use or /set-role user can be run (has to be an intiger)
-    "channel_admin_log": , # The log channel where bans are logged (intiger)
-    "channel_staff_log": , # The channel where staff-chanes are logged (with /set-role) (intiger)
-    "channel_report_log": , # The channel where reports are looged (intiger)
-
-
-    "bot_invite": "", # Invite of the bot. Example: https://discord.com/api/oauth2/authorize?client_id=<YOUR_BOT_ID>&permissions=1101659499601&scope=bot%20applications.commands
-    "bot_support_server": "", # Invite to the support server https://discord.gg/<CODE>
-    "bot_website": "", # Bot website 
+    "admin_guild": , 
+    "channel_admin_log": ,
+    "channel_staff_log": ,
+    "channel_report_log": ,
 
 
-    "standard_server_icon": "https://raw.githubusercontent.com/Blackstonecoden/Global-Chat/main/BLANK_ICON.jpg", # You don't have to change this
-    "icon_announcement": "https://raw.githubusercontent.com/Blackstonecoden/Global-Chat/main/ICON_IMPORTANT.png", # Not used atm
-    "icon_important": "https://raw.githubusercontent.com/Blackstonecoden/Global-Chat/main/ICON_IMPORTANT.png" # Not used atm
+    "bot_invite": "",
+    "bot_support_server": "",
+    "bot_website": "",
+
+
+    "standard_server_icon": "https://raw.githubusercontent.com/Blackstonecoden/Global-Chat/main/BLANK_ICON.jpg"
 }
