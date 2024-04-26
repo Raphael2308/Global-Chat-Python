@@ -122,3 +122,33 @@ The last thing that needs to be set up now is the database. Navigate to `./src/s
 ### 4.2 BOT startup
 
 Now you can start the BOT. Make sure you have completed all the preceding steps. If you're using Pterodactyl, go to your `Server > Startup > Bot Py File` and add `./src/bot.py` there. The BOT should now start without any errors. If there are any issues, feel free to join our [Discord](https://discord.gg/FVQxgBysA7) server and request assistance there.
+
+# Additional notes
+
+## 1. Add custom roles
+
+f you want to add a custom role to the bot, go to ./src/roles.json and add a new role to the JSON file. This role should be formatted like this:
+
+```json
+{
+  "developer": {
+    "name": "Developer",
+    "display_name": "<:developer:1233439646042554440> DEV",
+    "color": "0x5865f2"
+  }
+}
+```
+
+Explaination:
+
+```
+developer: The name used in the code, should be unique
+name: The name of the role used in the /set-role command
+display_name: Name of the role in the global-chat
+color: Hex-code that is used in the global-chat messages
+
+```
+
+## 2. Permission system
+
+The permission system is very simple. There are roles and permission levels. With `/set-role <user> <role> <permission_level>`, you can set a user's role and permission level (this command can only be executed in the admin guild). It's important to note that the role is purely cosmetic, and the permission level is what matters. Anyone with permission level 4 or higher can delete messages in the global chat, view the server list, and view the staff list. Anyone with permission level 10 or higher has access to all bot functions. This includes modifying roles of others (even if their permission level is higher than yours), clearing the message database (this should be done every 3 weeks), and locking the global chat.

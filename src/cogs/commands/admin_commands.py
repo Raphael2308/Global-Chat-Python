@@ -301,7 +301,7 @@ class admin_commands(commands.Cog):
         if permission is None:
             await interaction.response.send_message(f"{permission_error_message}", ephemeral=True)
             return
-        if permission >= 9:
+        if permission >= 10:
             try:
                 member_id = str(userid.id)
                 if role is None or role.value == "default":
