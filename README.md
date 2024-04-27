@@ -74,7 +74,7 @@ Next, the config.json will be edited. To do this, open the file `config.json` an
   "bot_support_server": "https://discord.gg/FVQxgBysA7",
   "bot_website": "https://www.discord.com",
 
-  "standard_server_icon": "hhttps://raw.githubusercontent.com/Blackstonecoden/Global-Chat/main/BLANK_ICON.jpg"
+  "standard_server_icon": "https://raw.githubusercontent.com/Blackstonecoden/Global-Chat/main/BLANK_ICON.jpg"
 }
 ```
 
