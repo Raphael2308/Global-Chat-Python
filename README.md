@@ -26,7 +26,7 @@ If you want to create your own Global Chat BOT, follow these steps. I will demon
 
 ## 1. Download
 
-Click on releases in the sidebar on the right-hand side, and click on the latest one at the bottom. Under Assets, click on `Global-ChatV?.?.zip`. Now, create a Python server, for example, on Pterodactyl, and move this ZIP file into the root directory. Unarchive this ZIP file now and move the files inside it to the root directory. Delete the ZIP and the unnecessary folder. Now you should have 4 files: a folder named `src`, a file named `.env`, `config.json` and `License.md`.
+Click on releases in the sidebar on the right-hand side, and click on the latest one at the bottom. Under Assets, click on `Global-ChatV?.?.zip`. Now, create a Python server, for example, on Pterodactyl, and move this ZIP file into the root directory. Unarchive this ZIP file now and move the files inside it to the root directory. Delete the ZIP and the unnecessary folder. Now you should have 4 files: a folder named `src`, a file named `.env`, `config.json`, `bot.py`, `setup.py` and `License.md`.
 
 ## 2. Setup the config files and libraries
 
@@ -47,14 +47,15 @@ database_database = globalchat
 
 ### 2.2 Setup of the config.json file
 
-Next, the config.json will be edited. To do this, open the file `config.json` and fill in all the information. The tables named database, message_database, etc., are specified in the setup.py file. Save the file. Here is an example of a config.json:
+Next, the config.json will be edited. To do this, open the file `./config.json` and fill in all the information. The tables named database, message_database, etc., are specified in the setup.py file. Save the file. Here is an example of a config.json:
 
 ```json
 {
-  "swear_file_path": "./src/swear.txt",
-  "bot_settings_file_path": "./src/bot_settings.json",
-  "emoji_file_path": "./src/emoji.txt",
-  "color_file_path": "./src/color.json",
+  "swear_file_path": "./src/messages/swear.txt",
+  "bot_settings_file_path": "./src/config/bot_settings.json",
+  "emoji_file_path": "./src/messages/emoji.txt",
+  "color_file_path": "./src/config/color.json",
+  "roles_file_path": "./src/config/roles.json",
 
   "database": "server_list",
   "message_database": "message_ids",
@@ -111,23 +112,23 @@ If you have a different server, you need to enter `pip install <library>` for ea
 
 ## 3.1 Emoji setup
 
-To make the role emojis work in the Global Chat, you need to set up specific emojis. First, you need a Discord server, typically the bot support server, where the Bot resides. Then, create 5 emojis, one for each role: Developer, Admin, Moderator, Partner, VIP. Upload these emojis in the Discord server settings, so they should be available in this server. Next, go to a channel and type a backslash, then click on the emoji menu and select the specific role emoji. The message should look like "\:emoji_name:". Send this message. Now the message should look like: `<:admin:1177681171103096862>`. Copy and paste the following into `./src/roles.json`. Do this for each role individually.
+To make the role emojis work in the Global Chat, you need to set up specific emojis. First, you need a Discord server, typically the bot support server, where the Bot resides. Then, create 5 emojis, one for each role: Developer, Admin, Moderator, Partner, VIP. Upload these emojis in the Discord server settings, so they should be available in this server. Next, go to a channel and type a backslash, then click on the emoji menu and select the specific role emoji. The message should look like "\:emoji_name:". Send this message. Now the message should look like: `<:admin:1177681171103096862>`. Copy and paste the following into `./src/config/roles.json`. Do this for each role individually.
 
 ## 4. Final setup
 
 ### 4.1 Database setup
 
-The last thing that needs to be set up now is the database. Navigate to `./src/setup.py` and edit the `admin_user` variable. This user will have admin privileges and can change the roles and permission level of other users on Discord using /set-role. Execute the file. After that, it will no longer be needed. However, you can keep it in case you lose access to the BOT and need to set a new admin user.
+The last thing that needs to be set up now is the database. Navigate to `./setup.py` and edit the `admin_user` variable. This user will have admin privileges and can change the roles and permission level of other users on Discord using /set-role. Execute the file. After that, it will no longer be needed. However, you can keep it in case you lose access to the BOT and need to set a new admin user.
 
 ### 4.2 BOT startup
 
-Now you can start the BOT. Make sure you have completed all the preceding steps. If you're using Pterodactyl, go to your `Server > Startup > Bot Py File` and add `./src/bot.py` there. The BOT should now start without any errors. If there are any issues, feel free to join our [Discord](https://discord.gg/FVQxgBysA7) server and request assistance there.
+Now you can start the BOT. Make sure you have completed all the preceding steps. If you're using Pterodactyl, go to your `Server > Startup > Bot Py File` and add `./bot.py` there. The BOT should now start without any errors. If there are any issues, feel free to join our [Discord](https://discord.gg/FVQxgBysA7) server and request assistance there.
 
 # Additional notes
 
 ## 1. Add custom roles
 
-f you want to add a custom role to the bot, go to ./src/roles.json and add a new role to the JSON file. This role should be formatted like this:
+f you want to add a custom role to the bot, go to ./src/config/roles.json and add a new role to the JSON file. This role should be formatted like this:
 
 ```json
 {

@@ -18,8 +18,6 @@ from discord.app_commands import Parameter
 from discord import app_commands
 import os
 from dotenv import load_dotenv
-
-
 ##########################################################################
 load_dotenv()
 
@@ -41,7 +39,7 @@ class Client(commands.Bot):
         intents.message_content = True
         super().__init__(command_prefix="!", intents=intents)
         
-        self.cogslist = ["cogs.commands.global_setup", "cogs.commands.ban_system", "cogs.commands.info_commands", "cogs.commands.admin_commands","cogs.commands.report_commands","cogs.global_chat"]
+        self.cogslist = ["src.cogs.commands.global_setup", "src.cogs.commands.ban_system", "src.cogs.commands.info_commands", "src.cogs.commands.admin_commands","src.cogs.commands.report_commands","src.cogs.global_chat"]
 
     async def setup_hook(self):
         for ext in self.cogslist:
@@ -59,10 +57,6 @@ class Client(commands.Bot):
         synced = await self.tree.sync()
         print(prfx + " Slash CMDs Synced " + Fore.BLUE + str(len(synced)) + " Commands")
         await client.change_presence(activity = discord.CustomActivity(name=bot_status))
-
-
-
-
 
 client = Client()
 client.remove_command('help')
