@@ -26,13 +26,13 @@ If you want to create your own Global Chat BOT, follow these steps. I will demon
 
 ## 1. Download
 
-Click on 'Code' at the top, download as ZIP. On your server panel, create a new server and upload the ZIP file into the root directory. Extract it, and delete the ZIP file. In the directory, there should now be 4 files: `.env.example`, `README.md`, `.gitignore`, `LICENSE.md`, and a folder named `src`. You can delete all files except .env.example and the src folder.
+Click on releases in the sidebar on the right-hand side, and click on the latest one at the bottom. Under Assets, click on `Global-ChatV?.?.zip`. Now, create a Python server, for example, on Pterodactyl, and move this ZIP file into the root directory. Unarchive this ZIP file now and move the files inside it to the root directory. Delete the ZIP and the unnecessary folder. Now you should have 4 files: a folder named `src`, a file named `.env`, `config.json` and `License.md`.
 
 ## 2. Setup the config files and libraries
 
 ### 2.1 Setup of the .env file
 
-First, we will edit the .env file. Open the .env.example file and fill in all the information. The comments can assist you. Ensure you input the token, database username, and password, etc., without quotation marks. Once you've filled everything in, rename the file to `.env`. The file should look something like this:
+First, we will edit the .env file. Open the .env file and fill in all the information. The comments can assist you. Ensure you input the token, database username, and password, etc., without quotation marks. Once you've filled everything in, save your file. The file should look something like this:
 
 ```.env
 TOKEN = ijasodk1239i821
@@ -47,7 +47,7 @@ database_database = globalchat
 
 ### 2.2 Setup of the config.json file
 
-Next, the config.json will be edited. To do this, open the file `./config.json.example` and fill in all the information. IMPORTANT: Since it is a JSON file, you need to remove the comments, which means everything following a #. The tables named database, message_database, etc., are specified in the setup.py file. The fields icon_announcement and icon_important are not needed. Now rename the file to `config.json`. Here is an example of a config.json:
+Next, the config.json will be edited. To do this, open the file `config.json` and fill in all the information. The tables named database, message_database, etc., are specified in the setup.py file. Save the file. Here is an example of a config.json:
 
 ```json
 {
