@@ -4,3 +4,4 @@ config.json
 examplecog.txt
 TODO.md
 roles.json
+*.hidden*

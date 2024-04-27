@@ -26,7 +26,8 @@
     "bot_invite": "",
     "bot_support_server": "",
     "bot_website": "",
+    "bot_website_enabled": "False",
 
 
-    "standard_server_icon": "https://raw.githubusercontent.com/Blackstonecoden/Global-Chat/main/BLANK_ICON.jpg"
+    "standard_server_icon": "https://raw.githubusercontent.com/Blackstonecoden/Global-Chat-Python/main/images/BLANK_ICON.jpg"
 }

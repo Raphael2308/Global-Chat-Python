@@ -18,6 +18,7 @@ bot_logo_url = config["bot_logo_url"]
 bot_invite = config["bot_invite"]
 bot_support_server = config["bot_support_server"]
 bot_website = config["bot_website"]
+bot_website_enabled = config["bot_website_enabled"]
 ##########################################################################
 color_location = config["color_file_path"]
 with open(color_location, 'r') as file:
@@ -49,7 +50,10 @@ class HelpButtons(discord.ui.View):
         self.add_item(invite_bot)
         support_server = discord.ui.Button(label='Support Server', style=discord.ButtonStyle.url, url=bot_support_server)
         self.add_item(support_server)
-        website = discord.ui.Button(label='Website', style=discord.ButtonStyle.url, url=bot_website)
+        if bot_website_enabled == "True":
+            website = discord.ui.Button(label='Website', style=discord.ButtonStyle.url, url=bot_website, disabled=False)
+        else:
+            website = discord.ui.Button(label='Website', style=discord.ButtonStyle.url, url=bot_website, disabled=True)
         self.add_item(website)
 
 async def setup(client:commands.Bot) -> None:

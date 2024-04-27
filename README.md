@@ -63,7 +63,7 @@ Next, the config.json will be edited. To do this, open the file `config.json` an
 
   "bot_name": "Global Chat",
   "bot_status": "Is Global",
-  "bot_logo_url": "https://raw.githubusercontent.com/Blackstonecoden/Global-Chat/main/LOGO.png",
+  "bot_logo_url": "https://raw.githubusercontent.com/Blackstonecoden/Global-Chat-Python/main/images/LOGO.png",
 
   "admin_guild": 1821182535732195922,
   "channel_admin_log": 1226092732317868944,
@@ -73,8 +73,9 @@ Next, the config.json will be edited. To do this, open the file `config.json` an
   "bot_invite": "https://discord.com/api/oauth2/authorize?client_id=1177590897152622672&permissions=1101659499601&scope=bot%20applications.commands",
   "bot_support_server": "https://discord.gg/FVQxgBysA7",
   "bot_website": "https://www.discord.com",
+  "bot_website_enabled": "True",
 
-  "standard_server_icon": "https://raw.githubusercontent.com/Blackstonecoden/Global-Chat/main/BLANK_ICON.jpg"
+  "standard_server_icon": "https://raw.githubusercontent.com/Blackstonecoden/Global-Chat-Python/main/images/BLANK_ICON.jpg"
 }
 ```
 

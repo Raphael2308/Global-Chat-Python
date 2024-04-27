@@ -23,6 +23,7 @@ bot_name = config["bot_name"]
 bot_logo_url = config["bot_logo_url"]
 bot_support_server = config["bot_support_server"]
 bot_website = config["bot_website"]
+bot_website_enabled = config["bot_website_enabled"]
 standard_server_icon = config["standard_server_icon"]
 ##########################################################################
 swear_word_list = config["swear_file_path"]
@@ -48,12 +49,10 @@ embed_timestamp = datetime.now(de)
 global_chat_cooldown = commands.CooldownMapping.from_cooldown(1, 5, commands.BucketType.user)
 
 block_reason = {
-    "|": "Banned Unicode character",
-    "||": "Swear word blocked",
-    "|||": "Link blocked"
+    "filter_text": "Banned Unicode character",
+    "filter_swear": "Swear word blocked",
+    "filter_link": "Link blocked"
 }
-
-
 
 discord_url = "https://discordapp.com/users/"
 ##########################################################################
@@ -343,18 +342,18 @@ def block_links(text):
     link_regex3 = re.compile(r'^#{1,3}\s.*$')
 
     if link_regex1.search(text) or link_regex2.search(text) or link_regex3.search(text):
-        return "|||"
+        return True
     else:
-        return text
+        return False
 
 
 
 def block_swear(text):
     profanity.load_censor_words_from_file(swear_word_list)
     if profanity.contains_profanity(text):
-        return ("||")
+        return True
     else:
-        return text
+        return False
 
 
 def filter_text(text):
@@ -362,9 +361,9 @@ def filter_text(text):
     matches = re.findall(regex_pattern, text)
 
     if len(matches) == len(text):
-        return text
+        return False
     else:
-        return "|"
+        return True
 ##########################################################################
 
 class global_chat(commands.Cog):
@@ -376,10 +375,23 @@ class global_chat(commands.Cog):
         if message.author.bot:
             return
 
-        content_formated = filter_text(message.content)
-        conent_anti_swear = block_swear(content_formated)
-        conent = block_links(conent_anti_swear)
-
+        permission_level = get_user_permission_level(message.author.id)
+        if permission_level is None or permission_level <= 15:
+            reason_block = None
+            if filter_text(message.content):
+                reason_block = block_reason["filter_text"]
+            if block_swear(message.content):
+                reason_block = block_reason["filter_swear"]
+            if block_links(message.content):
+                reason_block = block_reason["filter_link"]
+            if reason_block != None:
+                dm_channel = await message.author.create_dm()
+                embed = discord.Embed(title="Message blocked", description=f"Your message has been blocked by the Global Chat.", color=int(color["red_color"], 16), timestamp=embed_timestamp)
+                embed.add_field(name="Block reason", value=f"`{reason_block}`")
+                embed.set_footer(text=f"{bot_name}", icon_url=f"{bot_logo_url}")
+                await dm_channel.send(embed=embed)
+                await message.delete()
+                return
 
         if get_globalchat(message.guild.id, message.channel.id):
             if is_user_banned(message.author.id):
@@ -406,16 +418,6 @@ class global_chat(commands.Cog):
                 await message.delete()
                 return
             else:
-                if filter_text(conent) == "|":
-                    reason_block = block_reason[conent]
-                    dm_channel = await message.author.create_dm()
-                    embed = discord.Embed(title="Message blocked", description=f"Your message has been blocked by the Global Chat.", color=int(color["red_color"], 16), timestamp=embed_timestamp)
-                    embed.add_field(name="Block reason", value=f"`{reason_block}`")
-                    embed.set_footer(text=f"{bot_name}", icon_url=f"{bot_logo_url}")
-                    await dm_channel.send(embed=embed)
-                    await message.delete()
-                    return
-                
                 bucket = global_chat_cooldown.get_bucket(message)
                 retry_after = bucket.update_rate_limit()
             
@@ -525,7 +527,10 @@ class BanButtons(discord.ui.View):
         super().__init__(timeout=10)  
         support_server = discord.ui.Button(label='Support Server', style=discord.ButtonStyle.url, url=bot_support_server)
         self.add_item(support_server)
-        website = discord.ui.Button(label='Website', style=discord.ButtonStyle.url, url=bot_website, disabled=True)
+        if bot_website_enabled == "True":
+            website = discord.ui.Button(label='Website', style=discord.ButtonStyle.url, url=bot_website, disabled=False)
+        else:
+            website = discord.ui.Button(label='Website', style=discord.ButtonStyle.url, url=bot_website, disabled=True)
         self.add_item(website)
 
 async def setup(client:commands.Bot) -> None:
