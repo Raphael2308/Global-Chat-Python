@@ -443,14 +443,14 @@ class global_chat(commands.Cog):
             if is_user_in_data(message.author.id):
                 role = get_user_role(message.author.id)
                 prefix = role_prefix[role]
-                color = role_color[role]
+                color_user = role_color[role]
         #        embed = discord.Embed(title=f"{prefix}", description=conent, timestamp = embed_timestamp, color=color)
 
-                embed = discord.Embed(title=f"{prefix}", description=f"{conent}", color=color)
+                embed = discord.Embed(title=f"{prefix}", description=f"{conent}", color=color_user)
             else:
         #        embed = discord.Embed(description=conent, timestamp = embed_timestamp, color=white_color)
 
-                embed = discord.Embed(description=f"{conent}", color=int(color["white_color"], 16))          
+                embed = discord.Embed(description=f"{conent}", color=role_color["default"])          
 
 
 
