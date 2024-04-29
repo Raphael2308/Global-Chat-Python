@@ -2,19 +2,10 @@ import json
 from colorama import Back, Fore, Style
 import time
 import platform
-import asyncio
-from typing import Union
-import mysql.connector
-import schedule
-
-from typing import Callable, Optional
 
 import discord
 from discord.ext import commands
 from discord.ext.commands import CommandOnCooldown
-from discord import Message, Guild, TextChannel, Permissions
-from discord import ui
-from discord.app_commands import Parameter
 from discord import app_commands
 import os
 from dotenv import load_dotenv
@@ -64,7 +55,6 @@ client.remove_command('help')
 async def on_tree_error(interaction: discord.Interaction, error: app_commands.AppCommandError):
     if isinstance(error, app_commands.CommandOnCooldown):
         await interaction.response.send_message(f"`⌛` Cooldown. Please retry in **{round(error.retry_after, 1)}** seconds.", ephemeral=True)
-#            await interaction.response.send_message(str(error), ephemeral=True)
 client.tree.on_error = on_tree_error
 
 client.run(TOKEN)

@@ -312,7 +312,7 @@ def get_servers():
 ##########################################################################
 
 def generate_random_string():
-    characters = string.ascii_letters + string.digits  # enthält Buchstaben (klein und groß) und Zahlen
+    characters = string.ascii_letters + string.digits
     random_string = ''.join(random.choice(characters) for _ in range(20))
     return random_string
 
@@ -346,15 +346,12 @@ def block_links(text):
     else:
         return False
 
-
-
 def block_swear(text):
     profanity.load_censor_words_from_file(swear_word_list)
     if profanity.contains_profanity(text):
         return True
     else:
         return False
-
 
 def filter_text(text):
     regex_pattern = '[' + ''.join(map(re.escape, whitelist)) + ']'
