@@ -9,6 +9,7 @@ from datetime import datetime
 import pytz
 import string
 import random
+import time
 
 import re
 from better_profanity import profanity
@@ -95,6 +96,7 @@ def read_settings_variable(variable_name):
         print('Fehler beim Dekodieren der JSON-Datei.')
         return None
 ##########################################################################
+
 def connect_to_database():
     try:
         connection = mysql.connector.connect(
@@ -109,7 +111,17 @@ def connect_to_database():
         print(f"Fehler bei der Verbindung: {err}")
         return None
 
-connection = connect_to_database()
+def connect_with_retry():
+    while True:
+        connection = connect_to_database()
+        if connection is not None:
+            print("Erfolgreich mit der Datenbank verbunden.")
+            return connection
+        print("Wiederholter Verbindungsversuch in 5 Sekunden...")
+        time.sleep(5)
+
+
+connection = connect_with_retry()
 
 
 def get_globalchat(guild_id, channel_id=None):
