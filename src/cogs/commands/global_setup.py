@@ -123,6 +123,10 @@ class global_setup_commands(commands.Cog):
     @app_commands.guild_only()
     @app_commands.default_permissions(administrator=True)
     @app_commands.describe(channel="Specify a channel to become a Global Chat")
+    @app_commands.checks.bot_has_permissions(manage_channels=True, manage_messages=True, moderate_members=True, read_messages=True, use_external_emojis=True, attach_files=True, create_instant_invite=True)
+#    @app_commands.checks.bot_has_permissions(send_messages=True)
+#    @app_commands.checks.bot_has_permissions(manage_messages=True)
+#    @app_commands.check.
     async def add_global(self, interaction: discord.Interaction, channel: discord.TextChannel = None):
         try:
             if channel is None:

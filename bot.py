@@ -55,6 +55,11 @@ client.remove_command('help')
 async def on_tree_error(interaction: discord.Interaction, error: app_commands.AppCommandError):
     if isinstance(error, app_commands.CommandOnCooldown):
         await interaction.response.send_message(f"`⌛` Cooldown. Please retry in **{round(error.retry_after, 1)}** seconds.", ephemeral=True)
+    elif isinstance(error, app_commands.BotMissingPermissions):
+        await interaction.response.send_message("`❌` I don't have sufficient permissions. Please make sure that the BOT has the permissions it's granted with when invited. To fix this error, re-invite the bot using the official invite link.", ephemeral=True)
 client.tree.on_error = on_tree_error
+
+
+
 
 client.run(TOKEN)
