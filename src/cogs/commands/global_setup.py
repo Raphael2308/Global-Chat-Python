@@ -32,7 +32,34 @@ database_database = os.getenv('database_database')
 
 database = config["database"]
 ##########################################################################
+async def sendAll(self, guild):
+    try:
+        embed = discord.Embed(title=f"Welcome, {guild.name}", description=f"The server `{guild.name}` has joined the Global Chat. We hope you'll have a nice stay.", color=int(color["light_green_color"], 16), timestamp = embed_timestamp)
+        embed.set_footer(text=f"{bot_name}", icon_url=f"{bot_logo_url}")
 
+        icon = guild.icon
+        if icon is not None:
+            embed.set_thumbnail(url=icon)
+
+
+
+        servers = get_servers()
+
+        for server in servers["servers"]:
+            guild: discord.Guild = self.client.get_guild(int(server["guildid"]))
+            if guild:
+                channel: discord.TextChannel = guild.get_channel(int(server["channelid"]))
+                if channel:
+                    perms: discord.Permissions = channel.permissions_for(guild.get_member(self.client.user.id))
+                    if perms.send_messages:
+                        if perms.embed_links and perms.attach_files and perms.external_emojis:
+                            sent_message = await channel.send(embed=embed)
+                        else:
+                            await channel.send('Missing Permission. `Send Messages` `Embed links` `Use external emojis`')
+    except Exception as e:
+        print(f"{e}")
+        return f"{e}"
+##########################################################################
 def connect_to_database():
     try:
         connection = mysql.connector.connect(
@@ -91,7 +118,6 @@ def add_guild(server_id, channel_id, invite):
     except Exception as e:
         print(f"Fehler beim Einfügen der Daten: {e}")
 
-
 def remove_guild(guild_id):
     cursor = connection.cursor()
 
@@ -105,6 +131,34 @@ def remove_guild(guild_id):
 
     except Exception as e:
         print(f"Fehler beim Entfernen der Gilde: {e}")
+
+def get_servers():
+    cursor = connection.cursor(dictionary=True)
+
+    try:
+        select_query = f"SELECT guild_id, channel_id, invite FROM {database}"
+        cursor.execute(select_query)
+        
+        results = cursor.fetchall()
+
+        server_list = []
+        for result in results:
+            server_info = {
+                "guildid": result['guild_id'],
+                "channelid": result['channel_id'],
+                "invite": result['invite']
+            }
+            server_list.append(server_info)
+
+        connection.commit()
+        cursor.close()
+        
+
+        return {"servers": server_list}
+
+    except Exception as e:
+        print(f"Fehler beim Abrufen der Daten: {e}")
+        return None
 ##########################################################################
 
 
@@ -140,11 +194,12 @@ class global_setup_commands(commands.Cog):
                 await interaction.response.send_message(embed=embed, ephemeral=True)
             else:
                 invite_url = str(await channel.create_invite())
-            
-                add_guild(interaction.guild_id, channel.id, invite_url)               
+
+                add_guild(interaction.guild_id, channel.id, invite_url)
                 embed = discord.Embed(title="**Welcome to the GlobalChat**", description=f"Your server is ready for action! From now on, all messages in this channel will be broadcasted to all other servers!\n\nThe Global Chat channel is <#{channel.id}>.\n\nPlease note that in the GlobalChat, there should always be a slow mode of at least 5 seconds.", color=int(color["light_green_color"], 16), timestamp = embed_timestamp)
                 embed.set_footer(text=f"{bot_name}", icon_url=f"{bot_logo_url}")
                 await interaction.response.send_message(embed=embed, ephemeral=True)
+                await sendAll(self, interaction.guild) 
 
         except ValueError as e:
             await interaction.response.send_message(str(e), ephemeral=True)

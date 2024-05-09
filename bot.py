@@ -47,6 +47,7 @@ class Client(commands.Bot):
         print(prfx + " Guild-Only Slash CMDs Synced " + Fore.BLUE + str(len(guild_only)) + " Commands")
         synced = await self.tree.sync()
         print(prfx + " Slash CMDs Synced " + Fore.BLUE + str(len(synced)) + " Commands")
+        print("")
         await client.change_presence(activity = discord.CustomActivity(name=bot_status))
 
 client = Client()

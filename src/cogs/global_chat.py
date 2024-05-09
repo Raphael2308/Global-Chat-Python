@@ -10,6 +10,9 @@ import pytz
 import string
 import random
 import time
+import asyncio
+import threading
+from colorama import Back, Fore, Style
 
 import re
 from better_profanity import profanity
@@ -110,18 +113,38 @@ def connect_to_database():
     except mysql.connector.Error as err:
         print(f"Fehler bei der Verbindung: {err}")
         return None
-
-def connect_with_retry():
+    
+##########################################################################
+connection = None 
+async def connect():
+    global connection  
     while True:
         connection = connect_to_database()
         if connection is not None:
-            print("Erfolgreich mit der Datenbank verbunden.")
+            prfx = (Back.BLACK + Fore.WHITE + Style.BRIGHT + time.strftime("%H:%M:%S", time.gmtime()) + Back.RESET + Fore.BLUE + Style.NORMAL)
+            print(prfx + " Error " + Fore.RESET + "Successfully reconnected to the database")
             return connection
-        print("Wiederholter Verbindungsversuch in 5 Sekunden...")
-        time.sleep(5)
+        await asyncio.sleep(5)
+
+def check_connection():
+    global connection
+    while True:
+        if connection is None or not connection.is_connected():
+            prfx = (Back.BLACK + Fore.WHITE + Style.BRIGHT + time.strftime("%H:%M:%S", time.gmtime()) + Back.RESET + Fore.BLUE + Style.NORMAL)
+            print(prfx + " Error " + Fore.RESET + "Lost database connection")
+            connection = connect_to_database() 
+        time.sleep(5) 
 
 
-connection = connect_with_retry()
+async def main():
+    await connect()
+
+##########################################################################
+
+# Starte den Verbindungstest in einem separaten Thread
+connection_checker_thread = threading.Thread(target=check_connection)
+connection_checker_thread.daemon = True
+connection_checker_thread.start()
 
 
 def get_globalchat(guild_id, channel_id=None):
@@ -415,7 +438,9 @@ class global_chat(commands.Cog):
                 return
         
             permission_level = get_user_permission_level(message.author.id)
-            if read_settings_variable("chat_lock") == True and permission_level <4:
+            if permission_level is None:
+                permission_level = 0
+            if read_settings_variable("chat_lock") == True and permission_level < 4:
 
                 chat_lock_reason = read_settings_variable("chat_lock_reason")
                 dm_channel = await message.author.create_dm()
@@ -438,8 +463,16 @@ class global_chat(commands.Cog):
                     await dm_channel.send(embed=embed)
                     await message.delete()
                     return
+            if message.content == "":
+                dm_channel = await message.author.create_dm()
+
+                embed = discord.Embed(title="Cooldown", description=f"Error: You cannot send empty messages or images. If you believe this is an error, join the support server.", color=int(color["red_color"], 16), timestamp=embed_timestamp)
+                embed.set_footer(text=f"{bot_name}", icon_url=f"{bot_logo_url}")
+                await dm_channel.send(embed=embed)
+                await message.delete()
+                return
                 
-                await self.sendAll(message)
+            await self.sendAll(message)
 
         await self.client.process_commands(message)
 

@@ -104,7 +104,7 @@ standard_server_icon: Icon used for servers with no server icon. You don't have 
 
 ### 2.3 Installing all needed libraries
 
-Finally, you need to install all the required libraries. If you have a Pterodactyl server, click on `Server > Startup > Additional Python Packages`, and add the following there: `discord.py mysql-connector python-dotenv colorama schedule pytz better_profanity`
+Finally, you need to install all the required libraries. If you have a Pterodactyl server, click on `Server > Startup > Additional Python Packages`, and add the following there: `discord.py mysql-connector python-dotenv colorama schedule pytz better_profanity threading asyncio`
 
 If you have a different server, you need to enter `pip install <library>` for each library in the console.
 
