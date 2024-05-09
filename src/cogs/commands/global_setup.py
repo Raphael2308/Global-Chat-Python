@@ -196,6 +196,7 @@ class global_setup_commands(commands.Cog):
                 invite_url = str(await channel.create_invite())
 
                 add_guild(interaction.guild_id, channel.id, invite_url)
+                await channel.edit(slowmode_delay=5)
                 embed = discord.Embed(title="**Welcome to the GlobalChat**", description=f"Your server is ready for action! From now on, all messages in this channel will be broadcasted to all other servers!\n\nThe Global Chat channel is <#{channel.id}>.\n\nPlease note that in the GlobalChat, there should always be a slow mode of at least 5 seconds.", color=int(color["light_green_color"], 16), timestamp = embed_timestamp)
                 embed.set_footer(text=f"{bot_name}", icon_url=f"{bot_logo_url}")
                 await interaction.response.send_message(embed=embed, ephemeral=True)

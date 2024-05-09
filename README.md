@@ -17,7 +17,7 @@ If you'd like to test the features of the Global Chat BOT, feel free to invite t
 
 # Setup
 
-If you want to create your own Global Chat BOT, follow these steps. I will demonstrate the installation using the Pterodactyl software.
+If you want to create your own Global Chat BOT, follow these steps. I will demonstrate the installation using the Pterodactyl software. Important is that you have a Discord bot set up in advance with the intent `message_content` enabled.
 
 ### Requirements:
 
@@ -104,7 +104,7 @@ standard_server_icon: Icon used for servers with no server icon. You don't have 
 
 ### 2.3 Installing all needed libraries
 
-Finally, you need to install all the required libraries. If you have a Pterodactyl server, click on `Server > Startup > Additional Python Packages`, and add the following there: `discord.py mysql-connector python-dotenv colorama schedule pytz better_profanity threading asyncio`
+Finally, you need to install all the required libraries. If you have a Pterodactyl server, click on `Server > Startup > Additional Python Packages`, and add the following there: `discord.py mysql-connector python-dotenv colorama schedule pytz better_profanity`
 
 If you have a different server, you need to enter `pip install <library>` for each library in the console.
 
