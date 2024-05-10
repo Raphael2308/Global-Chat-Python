@@ -1,5 +1,5 @@
 #THIS IS A SETUP FILE. RUN IT ONLY ONCE AND CONFIGURE THE .ENV FIRST. IT WILL SETUP THE DATABASE
-admin_user =  12345 #Enter user ID of the user who should get admin perms (can be changed later with bot commands)
+admin_user = 12345 #Enter user ID of the user who should get admin perms (can be changed later with bot commands)
 
 # The name of the tables. Recommended to not change. If you wan't to change it, change it in config.json too
 database = "server_list"

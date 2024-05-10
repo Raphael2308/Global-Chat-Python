@@ -305,7 +305,7 @@ class admin_commands(commands.Cog):
     @app_commands.guilds(admin_guild)
     @app_commands.default_permissions(manage_messages=True)
     @app_commands.describe(amount="Specify how many servers should be displayed")
-    @app_commands.choices(amount=[app_commands.Choice(name="10", value="10"), app_commands.Choice(name="20", value="20"), app_commands.Choice(name="50", value="50")])
+    @app_commands.choices(amount=[app_commands.Choice(name="50", value="50"), app_commands.Choice(name="100", value="100"), app_commands.Choice(name="200", value="200")])
     async def server_list(self, interaction: discord.Interaction, amount: app_commands.Choice[str] = None):
         L = 10 #Length
         permission_level = get_user_permission_level(interaction.user.id)
@@ -314,10 +314,11 @@ class admin_commands(commands.Cog):
             return  
         if permission_level >= 4:
             if amount is None:
-                server_amount = 10
+                guilds = sorted(self.client.guilds, key=lambda x: x.member_count, reverse=True)
             else:
                 server_amount = int(amount.value)
-            guilds = sorted(self.client.guilds, key=lambda x: x.member_count, reverse=True)[:server_amount]
+                guilds = sorted(self.client.guilds, key=lambda x: x.member_count, reverse=True)[:server_amount]
+
             server_count = len(self.client.guilds)
 
             formatted_list = []

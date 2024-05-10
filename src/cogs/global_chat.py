@@ -148,25 +148,7 @@ class global_chat(commands.Cog):
     async def on_message(self, message):
         if message.author.bot:
             return
-
-        permission_level = get_user_permission_level(message.author.id)
-        if permission_level is None or permission_level <= 15:
-            reason_block = None
-            if filter_text(message.content):
-                reason_block = block_reason["filter_text"]
-            if block_swear(message.content):
-                reason_block = block_reason["filter_swear"]
-            if block_links(message.content):
-                reason_block = block_reason["filter_link"]
-            if reason_block != None:
-                dm_channel = await message.author.create_dm()
-                embed = discord.Embed(title="Message blocked", description=f"Your message has been blocked by the Global Chat.", color=int(color["red_color"], 16), timestamp=embed_timestamp)
-                embed.add_field(name="Block reason", value=f"`{reason_block}`")
-                embed.set_footer(text=f"{bot_name}", icon_url=f"{bot_logo_url}")
-                await dm_channel.send(embed=embed)
-                await message.delete()
-                return
-
+        
         if get_globalchat(message.guild.id, message.channel.id):
             if is_user_banned(message.author.id):
                 ban_reason = get_ban_reason(message.author.id)
@@ -178,8 +160,25 @@ class global_chat(commands.Cog):
                 await dm_channel.send(embed=embed, view=BanButtons())
                 await message.delete()
                 return
-        
+            
             permission_level = get_user_permission_level(message.author.id)
+            if permission_level is None or permission_level <= 15:
+                reason_block = None
+                if filter_text(message.content):
+                    reason_block = block_reason["filter_text"]
+                if block_swear(message.content):
+                    reason_block = block_reason["filter_swear"]
+                if block_links(message.content):
+                    reason_block = block_reason["filter_link"]
+                if reason_block != None:
+                    dm_channel = await message.author.create_dm()
+                    embed = discord.Embed(title="Message blocked", description=f"Your message has been blocked by the Global Chat.", color=int(color["red_color"], 16), timestamp=embed_timestamp)
+                    embed.add_field(name="Block reason", value=f"`{reason_block}`")
+                    embed.set_footer(text=f"{bot_name}", icon_url=f"{bot_logo_url}")
+                    await dm_channel.send(embed=embed)
+                    await message.delete()
+                    return
+    
             if permission_level is None:
                 permission_level = 0
             if read_settings_variable("chat_lock") == True and permission_level < 4:
