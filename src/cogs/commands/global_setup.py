@@ -7,6 +7,7 @@ import json
 import mysql.connector
 from datetime import datetime
 import pytz
+from ...my_sql import *
 ##########################################################################
 load_dotenv()
 config_location = os.getenv('config_location')
@@ -24,14 +25,6 @@ with open(color_location, 'r') as file:
 de = pytz.timezone('Europe/Berlin')
 embed_timestamp = datetime.now(de)
 ##########################################################################
-database_host = os.getenv('database_host')
-database_port = os.getenv('database_port')
-database_user = os.getenv('database_user')
-database_passwd = os.getenv('database_passwd')
-database_database = os.getenv('database_database')
-
-database = config["database"]
-##########################################################################
 async def sendAll(self, guild):
     try:
         embed = discord.Embed(title=f"Welcome, {guild.name}", description=f"The server `{guild.name}` has joined the Global Chat. We hope you'll have a nice stay.", color=int(color["light_green_color"], 16), timestamp = embed_timestamp)
@@ -40,8 +33,6 @@ async def sendAll(self, guild):
         icon = guild.icon
         if icon is not None:
             embed.set_thumbnail(url=icon)
-
-
 
         servers = get_servers()
 
@@ -60,118 +51,10 @@ async def sendAll(self, guild):
         print(f"{e}")
         return f"{e}"
 ##########################################################################
-def connect_to_database():
-    try:
-        connection = mysql.connector.connect(
-            host=database_host,
-            port=database_port,
-            user=database_user,
-            passwd=database_passwd,
-            database=database_database
-        )
-        return connection
-    except mysql.connector.Error as err:
-        print(f"Fehler bei der Verbindung: {err}")
-        return None
-
-connection = connect_to_database()
-
-def guild_exists(server_id):
-    try:
-        cursor = connection.cursor()
-
-        query = f"SELECT * FROM `{database}` WHERE `guild_id` = %s"
-        data = (server_id,)
-        cursor.execute(query, data)
-
-        result = cursor.fetchone()
-
-        connection.commit()
-        cursor.close()
-        if result:
-            return True
-        else:
-            return False
-
-
-    except Exception as e:
-        return f"{e}"
-
-def add_guild(server_id, channel_id, invite):
-    cursor = connection.cursor()
-
-    current_datetime = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-
-    insert_query = f"""
-    INSERT INTO `{database}` (`guild_id`, `channel_id`, `invite`, `created_at`)
-    VALUES (%s, %s, %s, %s)
-    """
-
-    data = (server_id, channel_id, invite, current_datetime)
-    try:
-        cursor.execute(insert_query, data)
-        
-        connection.commit()
-        cursor.close()
-
-
-    except Exception as e:
-        print(f"Fehler beim Einfügen der Daten: {e}")
-
-def remove_guild(guild_id):
-    cursor = connection.cursor()
-
-    delete_query = f"DELETE FROM {database} WHERE guild_id = %s"
-
-    try:
-        cursor.execute(delete_query, (guild_id,))
-        connection.commit()
-        cursor.close()
-
-
-    except Exception as e:
-        print(f"Fehler beim Entfernen der Gilde: {e}")
-
-def get_servers():
-    cursor = connection.cursor(dictionary=True)
-
-    try:
-        select_query = f"SELECT guild_id, channel_id, invite FROM {database}"
-        cursor.execute(select_query)
-        
-        results = cursor.fetchall()
-
-        server_list = []
-        for result in results:
-            server_info = {
-                "guildid": result['guild_id'],
-                "channelid": result['channel_id'],
-                "invite": result['invite']
-            }
-            server_list.append(server_info)
-
-        connection.commit()
-        cursor.close()
-        
-
-        return {"servers": server_list}
-
-    except Exception as e:
-        print(f"Fehler beim Abrufen der Daten: {e}")
-        return None
-##########################################################################
-
-
 class global_setup_commands(commands.Cog):
     def __init__(self, client: commands.Bot):
         self.client = client
-    @app_commands.command(name="test", description="Test Command")
-    async def add_global(self, interaction: discord.Interaction):
-        await interaction.response.send_message(f"Test", ephemeral=True)
-
-
-
-    
+            
 
     @app_commands.command(name="add-global", description="Let's you add a Global Chat to your server")
     @app_commands.guild_only()

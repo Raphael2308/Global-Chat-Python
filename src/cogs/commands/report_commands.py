@@ -7,6 +7,8 @@ import json
 import mysql.connector
 from datetime import datetime
 import pytz
+
+from ...my_sql import *
 ##########################################################################
 load_dotenv()
 config_location = os.getenv('config_location')
@@ -28,91 +30,6 @@ bot_support_server =  config["bot_support_server"]
 bot_website =  config["bot_website"]
 
 channel_report_log = config["channel_report_log"]
-##########################################################################
-database_host = os.getenv('database_host')
-database_port = os.getenv('database_port')
-database_user = os.getenv('database_user')
-database_passwd = os.getenv('database_passwd')
-database_database = os.getenv('database_database')
-
-database = config["database"]
-message_database = config["message_database"]
-user_data_databse = config["user_data_databse"]
-ban_database = config["ban_database"]
-##########################################################################
-def connect_to_database():
-    try:
-        connection = mysql.connector.connect(
-            host=database_host,
-            port=database_port,
-            user=database_user,
-            passwd=database_passwd,
-            database=database_database
-        )
-        return connection
-    except mysql.connector.Error as err:
-        print(f"Fehler bei der Verbindung: {err}")
-        return None
-
-connection = connect_to_database()
-##########################################################################
-def is_user_banned(user_id):
-    cursor = connection.cursor(dictionary=True)
-    try:
-        query = f"SELECT COUNT(*) as count FROM {ban_database} WHERE user_id = %s"
-        cursor.execute(query, (user_id,))
-
-        result = cursor.fetchone()
-
-        connection.commit()
-        cursor.close()
-
-        return result['count'] > 0
-
-    except mysql.connector.Error as err:
-        print(f"Fehler beim Überprüfen des Nutzers: {err}")
-        return False
-
-def get_ban_reason(user_id):
-    cursor = connection.cursor()
-    try:
-        query = f"SELECT reason FROM {ban_database} WHERE user_Id = %s"
-        cursor.execute(query, (user_id,))
-
-        result = cursor.fetchone()
-
-        connection.commit()
-        cursor.close()
-
-        if result:
-            ban_reason = result[0]
-            return ban_reason
-        else:
-            return False
-
-    except Exception as e:
-        print("Fehler bei der Abfrage: {}".format(str(e)))
-
-def get_uuid_from_message_id(message_id):
-    try:
-        cursor = connection.cursor(dictionary=True)
-        query = f"SELECT uuid FROM {message_database} WHERE message_id = %s"
-        cursor.execute(query, (message_id,))
-
-
-        result = cursor.fetchone()
-
-        connection.commit()
-        cursor.close()
-        
-        if result:
-            return result['uuid']
-        else:
-            return None
-
-    except mysql.connector.Error as err:
-        print(f"Fehler beim Abrufen der UUID: {err}")
-        return None
 ##########################################################################        
 def get_id_by_url(url):
     index = url.rfind('/')

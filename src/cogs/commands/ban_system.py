@@ -9,6 +9,7 @@ import mysql.connector
 from datetime import datetime
 import pytz
 from typing import Union
+from ...my_sql import *
 ##########################################################################
 load_dotenv()
 config_location = os.getenv('config_location')
@@ -28,136 +29,6 @@ with open(color_location, 'r') as file:
 
 de = pytz.timezone('Europe/Berlin')
 embed_timestamp = datetime.now(de)
-##########################################################################
-database_host = os.getenv('database_host')
-database_port = os.getenv('database_port')
-database_user = os.getenv('database_user')
-database_passwd = os.getenv('database_passwd')
-database_database = os.getenv('database_database')
-
-database = config["database"]
-ban_database = config["ban_database"]
-user_data_databse = config["user_data_databse"]
-##########################################################################
-def connect_to_database():
-    try:
-        connection = mysql.connector.connect(
-            host=database_host,
-            port=database_port,
-            user=database_user,
-            passwd=database_passwd,
-            database=database_database
-        )
-        return connection
-    except mysql.connector.Error as err:
-        print(f"Fehler bei der Verbindung: {err}")
-        return None
-
-connection = connect_to_database()
-
-def load_banned_users():
-    try:
-        cursor = connection.cursor(dictionary=True)
-        query = f"SELECT user_id, reason FROM {ban_database}"
-        cursor.execute(query)
-
-        result = cursor.fetchall()
-        output_data = [{'id': row['user_id'], 'reason': row['reason']} for row in result]
-
-        connection.commit()
-        cursor.close()
-
-        return output_data
-
-    except mysql.connector.Error as err:
-        print(f"Fehler beim Abrufen der Daten: {err}")
-
-def ban_user_command(user_id, reason):
-    try:
-        if connection:
-            cursor = connection.cursor()
-            created_at = datetime.now()
-
-            query = f"INSERT INTO {ban_database} (user_id, reason, created_at) VALUES (%s, %s, %s)"
-            data = (user_id, reason, created_at)
-
-            cursor.execute(query, data)
-
-            connection.commit()
-            cursor.close()
-
-    except Exception as e:
-        print(f"Fehler beim Hinzufügen des Benutzers: {e}")
-
-def unban_user_command(user_id):
-    try:
-
-        if connection:
-            cursor = connection.cursor()
-            query = f"DELETE FROM {ban_database} WHERE user_id = %s"
-            data = (user_id,)
-
-            cursor.execute(query, data)
-
-            connection.commit()
-            cursor.close()
-
-    except Exception as e:
-        print(f"Fehler beim Entfernen des Benutzers: {e}")
-
-def is_user_banned(user_id):
-    cursor = connection.cursor(dictionary=True)
-    try:
-        query = f"SELECT COUNT(*) as count FROM {ban_database} WHERE user_id = %s"
-        cursor.execute(query, (user_id,))
-
-        result = cursor.fetchone()
-
-        connection.commit()
-        cursor.close()
-
-        return result['count'] > 0
-
-    except mysql.connector.Error as err:
-        print(f"Fehler beim Überprüfen des Nutzers: {err}")
-        return False
-
-def get_ban_reason(user_id):
-    cursor = connection.cursor()
-    try:
-        query = f"SELECT reason FROM {ban_database} WHERE user_Id = %s"
-        cursor.execute(query, (user_id,))
-
-        result = cursor.fetchone()
-
-        if result:
-            ban_reason = result[0]
-            return ban_reason
-        else:
-            return False
-
-    except Exception as e:
-        print("Fehler bei der Abfrage: {}".format(str(e)))
-
-def get_user_permission_level(user_id):
-    cursor = connection.cursor(dictionary=True)
-
-    try:
-        query = f"SELECT permission_level FROM {user_data_databse} WHERE user_id = %s"
-        cursor.execute(query, (user_id,))
-
-        result = cursor.fetchone()
-
-        connection.commit()
-        cursor.close()
-        
-        if result:
-            return int(result['permission_level'])
-        else:
-            return None
-
-    except mysql.connector.Error as err:
-        print(f"Fehler beim Abrufen des Permission Levels: {err}")
 ##########################################################################
 class ban_system(commands.Cog):
     def __init__(self, client: commands.Bot):

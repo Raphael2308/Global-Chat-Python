@@ -9,6 +9,7 @@ from discord.ext.commands import CommandOnCooldown
 from discord import app_commands
 import os
 from dotenv import load_dotenv
+from src.my_sql import start_connection_checker
 ##########################################################################
 load_dotenv()
 
@@ -24,6 +25,7 @@ bot_status = config["bot_status"]
 def clear_console():
     os.system('cls' if os.name == 'nt' else 'clear')
 ##########################################################################
+start_connection_checker()
 class Client(commands.Bot):
     def __init__(self):
         intents = discord.Intents.default()

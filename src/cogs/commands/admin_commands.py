@@ -8,7 +8,7 @@ import mysql.connector
 from typing import Callable, Optional
 from typing import Union
 from discord.app_commands import Parameter
-
+from ...my_sql import *
 
 from datetime import datetime
 import pytz
@@ -44,17 +44,6 @@ channel_staff_log = config["channel_staff_log"]
 
 bot_settings = config["bot_settings_file_path"]
 ##########################################################################
-database_host = os.getenv('database_host')
-database_port = os.getenv('database_port')
-database_user = os.getenv('database_user')
-database_passwd = os.getenv('database_passwd')
-database_database = os.getenv('database_database')
-
-database = config["database"]
-ban_database = config["ban_database"]
-user_data_databse = config["user_data_databse"]
-message_database =  config["message_database"]
-
 role_choices = [app_commands.Choice(name=info["name"], value=role) for role, info in roles.items()]
 ##########################################################################
 def update_settings_variable(variable_name, new_value):
@@ -70,88 +59,6 @@ def update_settings_variable(variable_name, new_value):
     except json.JSONDecodeError:
         print('Fehler beim Dekodieren der JSON-Datei.')
 ##########################################################################
-def connect_to_database():
-    try:
-        connection = mysql.connector.connect(
-            host=database_host,
-            port=database_port,
-            user=database_user,
-            passwd=database_passwd,
-            database=database_database
-        )
-        return connection
-    except mysql.connector.Error as err:
-        print(f"Fehler bei der Verbindung: {err}")
-        return None
-
-connection = connect_to_database()
-
-def clear_table(table_name):
-    try:
-        cursor = connection.cursor()
-        sql_query = f"DELETE FROM {table_name}"
-        cursor.execute(sql_query)
-
-        connection.commit()
-        cursor.close()
-    except Exception as e:
-        return (f'Fehler beim Leeren der Tabelle {table_name}: {str(e)}')
-
-##########################################################################
-def get_user_permission_level(user_id):
-    cursor = connection.cursor(dictionary=True)
-
-    try:
-        query = f"SELECT permission_level FROM {user_data_databse} WHERE user_id = %s"
-        cursor.execute(query, (user_id,))
-
-        result = cursor.fetchone()
-
-        connection.commit()
-        cursor.close()
-        if result:
-            return int(result['permission_level'])
-        else:
-            return None
-
-    except mysql.connector.Error as err:
-        print(f"Fehler beim Abrufen des Permission Levels: {err}")
-
-def guild_exists(server_id):
-    try:
-        cursor = connection.cursor()
-        query = f"SELECT * FROM `{database}` WHERE `guild_id` = %s"
-        data = (server_id,)
-        cursor.execute(query, data)
-
-        result = cursor.fetchone()
-
-        connection.commit()
-        cursor.close()
-        if result:
-            return True
-        else:
-            return False
-
-    except Exception as e:
-        return f"{e}"
-
-def load_data():
-    try:
-        cursor = connection.cursor(dictionary=True)
-        query = f"SELECT user_id, role, permission_level FROM {user_data_databse}"
-        cursor.execute(query)
-
-        result = cursor.fetchall()
-        output_data = [{'user_id': row['user_id'], 'role': row['role'], 'permission_level': row['permission_level']} for row in result]
-
-        connection.commit()
-        cursor.close()
-        return output_data
-
-    except mysql.connector.Error as err:
-        print(f"Fehler beim Abrufen der Daten: {err}")
-
 def list_staff_members():
     data = load_data()
     staff_dict = {role: [] for role in roles if role != "default"}
@@ -170,88 +77,6 @@ def list_staff_members():
 
     return formatted_text
 
-
-def add_user(user_id, role, permission_level):
-    try:
-        if connection:
-            cursor = connection.cursor()
-            created_at = datetime.now()
-
-            query = f"INSERT INTO {user_data_databse} (user_id, role, permission_level, created_at) VALUES (%s, %s, %s, %s)"
-            data = (user_id, role, permission_level, created_at)
-
-            cursor.execute(query, data)
-            connection.commit()
-            cursor.close()
-
-
-    except Exception as e:
-        print(f"Fehler beim Hinzufügen des Benutzers: {e}")
-
-def remove_user(user_id):
-    try:
-
-        if connection:
-            cursor = connection.cursor()
-
-            query = f"DELETE FROM {user_data_databse} WHERE user_id = %s"
-            data = (user_id,)
-
-            cursor.execute(query, data)
-            connection.commit()
-            cursor.close()
-
-    except Exception as e:
-        print(f"Fehler beim Entfernen des Benutzers: {e}")
-
-def get_uuid_from_message_id(message_id):
-    try:
-        cursor = connection.cursor(dictionary=True)
-        query = f"SELECT uuid FROM {message_database} WHERE message_id = %s"
-        cursor.execute(query, (message_id,))
-
-
-        result = cursor.fetchone()
-
-        connection.commit()
-        cursor.close()
-        if result:
-            return result['uuid']
-        else:
-            return None
-
-    except mysql.connector.Error as err:
-        print(f"Fehler beim Abrufen der UUID: {err}")
-        return None
-    
-def get_channel_id_by_guild_id(server_id):
-    cursor = connection.cursor()
-    query = f"SELECT channel_id FROM {database} WHERE guild_id = %s"
-    cursor.execute(query, (server_id,))
-
-    result = cursor.fetchone()
-
-    connection.commit()
-    cursor.close()
-
-    if result:
-        channel_id = result[0]
-        return channel_id
-    else:
-        return None
-
-def get_messages_by_uuid(uuid):
-    cursor = connection.cursor()
-
-    query = f"SELECT message_id, guild_id FROM {message_database} WHERE uuid = %s"
-    cursor.execute(query, (uuid,))
-
-    result = {message_id: guild_id for message_id, guild_id in cursor.fetchall()}
-
-    connection.commit()
-    cursor.close()
-    return result
-
 def merge_ids(message_ids_and_guild_ids):
     merged_data = {}
 
@@ -260,8 +85,6 @@ def merge_ids(message_ids_and_guild_ids):
         if channel_id is not None:
             merged_data[guild_id] = {'message_id': message_id, 'guild_id': guild_id, 'channel_id': channel_id}
     return merged_data
-##########################################################################
-
 ##########################################################################
 class admin_commands(commands.Cog):
     def __init__(self, client: commands.Bot):
