@@ -12,6 +12,8 @@ from ...my_sql import *
 
 from datetime import datetime
 import pytz
+
+from ...i18n import *
 ##########################################################################
 load_dotenv()
 config_location = os.getenv('config_location')
@@ -35,7 +37,12 @@ for role, info in roles.items():
 de = pytz.timezone('Europe/Berlin')
 embed_timestamp = datetime.now(de)
 ##########################################################################
-permission_error_message = "`❌` You are not staff or your permission level is not high enough."
+language = config["language"]
+language_file_path = config["language_file_path"]
+
+translator = Translator(language_file_path, language)
+permission_error_message = translator.translate("cogs.admin_commands.permission_error_message")
+##########################################################################
 bot_name = config["bot_name"]
 bot_logo_url = config["bot_logo_url"]
 admin_guild = config["admin_guild"]
@@ -94,7 +101,7 @@ class admin_commands(commands.Cog):
         self.client.tree.add_command(self.ctx_menu) 
 
 
-    @app_commands.command(name="staff-list", description="Outputs the list of all staff members")
+    @app_commands.command(name="staff-list", description=translator.translate("command.staff_list.description"))
     @app_commands.guilds(admin_guild)
     @app_commands.default_permissions(administrator=True)
     async def staff_list(self, interaction: discord.Interaction):
@@ -106,18 +113,18 @@ class admin_commands(commands.Cog):
             formatted_text = list_staff_members()
 #            formatted_vips = list_vips()
 #            embed = discord.Embed(title=f"Staff list", description=f"That's a list of all current staff members.\n{formatted_text}\n⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯\n{formatted_vips}", color=int(color["white_color"], 16), timestamp=embed_timestamp)
-            embed = discord.Embed(title=f"Staff list", description=f"That's a list of all current staff members.\n{formatted_text}", color=int(color["white_color"], 16), timestamp=embed_timestamp)
+            embed = discord.Embed(title=translator.translate("command.staff_list.embed.title"), description=translator.translate("commands.staff_list.embed.description", formatted_text=formatted_text), color=int(color["white_color"], 16), timestamp=embed_timestamp)
             embed.set_footer(text=f"{bot_name}", icon_url=f"{bot_logo_url}")
             await interaction.response.send_message(embed=embed, ephemeral=True)
         else:
             await interaction.response.send_message(f"{permission_error_message}", ephemeral=True)
 
-    @app_commands.command(name="set-role", description="Outputs the list of banned users")
+    @app_commands.command(name="set-role", description=translator.translate("command.set_role.description"))
     @app_commands.guilds(admin_guild)
     @app_commands.default_permissions(administrator=True)
-    @app_commands.describe(userid="Enter the User ID of the user")
-    @app_commands.describe(role="Enter the role that the user should receive")
-    @app_commands.describe(permission_level="Specify the permission level that the user should receive")
+    @app_commands.describe(userid=translator.translate("command.set_role.parameter.userid"))
+    @app_commands.describe(role=translator.translate("command.set_role.parameter.role"))
+    @app_commands.describe(permission_level=translator.translate("command.set_role.parameter.permission_level"))
     @app_commands.choices(role=role_choices)
     async def set_role(self, interaction: discord.Interaction, userid: Union[discord.Member, discord.User], role: app_commands.Choice[str] = None, permission_level: int = None):
         permission = get_user_permission_level(interaction.user.id)
@@ -135,12 +142,12 @@ class admin_commands(commands.Cog):
                             remove_user(member_id)
                             user_role = "default"
                             user_found = True
-                            log_type = "User Role removed."
+                            log_type = translator.translate("command.set_role.log_embed.title.role_removed")
                             log_color = int(color["red_color"], 16)
                             break
 
                     if not user_found:
-                        await interaction.response.send_message(content=f"You cannot move <@{member_id}> to the default group as they are already in the default group.", ephemeral=True)
+                        await interaction.response.send_message(content=translator.translate("command.set_role.error.user", member_id=member_id), ephemeral=True)
                         return
 
                 else:
@@ -155,49 +162,49 @@ class admin_commands(commands.Cog):
                             remove_user(member_id)
                             add_user(member_id, user_role, permission_level)
                             user_found = True
-                            log_type = "User Role changed"
+                            log_type = translator.translate("command.set_role.log_embed.title.role_changed")
                             log_color = int(color["yellow_color"], 16)
                             break
                     if not user_found:
                         add_user(member_id, user_role, permission_level)
-                        log_type = "User Role added."
+                        log_type = translator.translate("command.set_role.log_embed.title.role_added")
                         log_color = int(color["light_green_color"], 16)
                 
-                embed = discord.Embed(title=f"Role Change", description=f"You have successfully changed the role of the user <@{member_id}>.", color=int(color["white_color"], 16), timestamp=embed_timestamp)
-                embed.add_field(name="User ID", value=f"`{member_id}`")
+                embed = discord.Embed(title=translator.translate("command.set_role.embed.title"), description=translator.translate("command.set_role.embed.description", member_id=member_id), color=int(color["white_color"], 16), timestamp=embed_timestamp)
+                embed.add_field(name=translator.translate("command.set_role.embed.user_id.name"), value=f"`{member_id}`")
                 if user_role is None:
-                    embed.add_field(name="Role", value=f"`default`")     
+                    embed.add_field(name=translator.translate("command.set_role.embed.role.name"), value=f"`default`")     
                 else:
-                    embed.add_field(name="Role", value=f"`{user_role}`")              
-                embed.add_field(name="Permission Level", value=f"`{permission_level}`")      
+                    embed.add_field(name=translator.translate("command.set_role.embed.role.name"), value=f"`{user_role}`")              
+                embed.add_field(name=translator.translate("command.set_role.embed.permission_level.name"), value=f"`{permission_level}`")      
                 embed.set_footer(text=f"{bot_name}", icon_url=f"{bot_logo_url}")
                 await interaction.response.send_message(embed=embed, ephemeral=True)
 
 
                 if log_type is None or log_color is None:
-                    log_embed = discord.Embed(title=f"Role Change", description=f"The following user has been reviewed by <@{interaction.user.id}>.", color=int(color["yellow_color"], 16), timestamp=embed_timestamp)
+                    log_embed = discord.Embed(title=translator.translate("command.set.role.log_embed.title.role_change"), description=translator.translate("command.set_role.log_embed.description", user_id=interaction.user.id), color=int(color["yellow_color"], 16), timestamp=embed_timestamp)
                 else:
-                    log_embed = discord.Embed(title=f"{log_type}", description=f"The following user has been reviewed by <@{interaction.user.id}>.", color=log_color, timestamp=embed_timestamp)
+                    log_embed = discord.Embed(title=f"{log_type}", description=translator.translate("command.set_role.log_embed.description", user_id=interaction.user.id), color=log_color, timestamp=embed_timestamp)
 
-                log_embed.add_field(name="User", value=f"<@{member_id}>")
+                log_embed.add_field(name=translator.translate("command.set_role.log_embed.user.name"), value=f"<@{member_id}>")
 
                 if user_role is None:
-                    log_embed.add_field(name="Role", value=f"`default`")     
+                    log_embed.add_field(name=translator.translate("command.set_role.log_embed.role.name"), value=f"`default`")     
                 else:
-                    log_embed.add_field(name="Role", value=f"`{user_role}`")  
+                    log_embed.add_field(name=translator.translate("command.set_role.log_embed.role.name"), value=f"`{user_role}`")  
 
-                log_embed.add_field(name="Permission Level", value=f"`{permission_level}`")  
+                log_embed.add_field(name=translator.translate("command.set_role.log_embed.permission_level.name"), value=f"`{permission_level}`")  
                 embed.set_footer(text=f"{bot_name}", icon_url=f"{bot_logo_url}")
 
                 channel = interaction.client.get_channel(channel_staff_log)
                 await channel.send(embed=log_embed)
 
             except:
-                await interaction.response.send_message(content="An error occurred.", ephemeral=True)
+                await interaction.response.send_message(content=translator.translate("command.set_role.error"), ephemeral=True)
         else:
             await interaction.response.send_message(f"{permission_error_message}", ephemeral=True)
 
-    @app_commands.command(name="clear-database", description="Allows you to clear the Message IDs database")
+    @app_commands.command(name="clear-database", description=translator.translate("command.clear_table.description"))
     @app_commands.guilds(admin_guild)
     @app_commands.default_permissions(administrator=True)
     async def clear_database(self, interaction: discord.Interaction):
@@ -208,18 +215,18 @@ class admin_commands(commands.Cog):
         if permission_level >= 10:
             try:
                 clear_table(message_database)
-                await interaction.response.send_message(f"`✅` The Message IDs database was successfully cleared.", ephemeral=True)
+                await interaction.response.send_message(content=translator.translate("command.clear_database.message.succes"), ephemeral=True)
             except:
-                await interaction.response.send_message(f"`❌` An error occurred while clearing the Message IDS table.", ephemeral=True)
+                await interaction.response.send_message(content=translator.translate("command.clear_database.message.error"), ephemeral=True)
         else:
             await interaction.response.send_message(f"{permission_error_message}", ephemeral=True)
 
-    @app_commands.command(name="chat-lock", description="Allows you to lock the global chat")
+    @app_commands.command(name="chat-lock", description=translator.translate("command.chat_lock.description"))
     @app_commands.guilds(admin_guild)
-    @app_commands.describe(mode="Choose the chat lock mode")
-    @app_commands.describe(reason="Specify the reason for the chat lock")
+    @app_commands.describe(mode=translator.translate("command.chat_lock.parameter.mode"))
+    @app_commands.describe(reason=translator.translate("command.chat_lock.parameter.reason"))
     @app_commands.default_permissions(administrator=True)
-    @app_commands.choices(mode=[app_commands.Choice(name="On", value="true"), app_commands.Choice(name="Off", value="false")])
+    @app_commands.choices(mode=[app_commands.Choice(name=translator.translate("command.chat_lock.parameter.mode.on"), value="true"), app_commands.Choice(name=translator.translate("command.chat_lock.parameter.mode.off"), value="false")])
     async def chat_lock(self, interaction: discord.Interaction, mode: app_commands.Choice[str], reason: str = "No reason given"):
         permission_level = get_user_permission_level(interaction.user.id)
         if permission_level is None:
@@ -227,7 +234,7 @@ class admin_commands(commands.Cog):
             return    
         if permission_level >= 10:
             try:
-                await interaction.response.send_message(f"`🔌` Loading...", ephemeral=True)
+                await interaction.response.send_message(content=translator.translate("command.chat_lock.message.loading"), ephemeral=True)
                 if mode.value == "true":
                     update_settings_variable("chat_lock_reason", reason)
                 else:
@@ -236,19 +243,19 @@ class admin_commands(commands.Cog):
                 update_settings_variable("chat_lock", mode.value)
                 
                 if mode.value == "true":
-                    await interaction.edit_original_response(content=f"`🔒` The global chat has been successfully locked.")
+                    await interaction.edit_original_response(content=translator.translate("command.chat_lock.message.locked"))
                 else:
-                    await interaction.edit_original_response(content=f"`🔓` The global chat has been successfully unlocked.")
+                    await interaction.edit_original_response(content=translator.translate("command.chat_lock.message.unlocked"))
             except:
-                await interaction.edit_original_response(content=f"`❌` An error occurred while locking the chat.")
+                await interaction.edit_original_response(content=translator.translate("command.chat_lock.message.error"))
         else:
             await interaction.response.send_message(f"{permission_error_message}", ephemeral=True)
 
 
 
-    @app_commands.command(name="delete-message", description="Allows you to delete a message")
+    @app_commands.command(name="delete-message", description=translator.translate("command.delete_message.description"))
     @app_commands.guilds(admin_guild)
-    @app_commands.describe(message_id="Enter the Message ID")
+    @app_commands.describe(message_id=translator.translate("command.delete_message.parameter.message_id"))
     @app_commands.default_permissions(manage_messages=True)
     async def delete_message(self, interaction: discord.Interaction, message_id: str):
         permission_level = get_user_permission_level(interaction.user.id)
@@ -257,17 +264,17 @@ class admin_commands(commands.Cog):
             return    
         if permission_level >= 4:
             try:            
-                await interaction.response.send_message(f"`🔌` Loading...", ephemeral=True)
+                await interaction.response.send_message(content=translator.translate("command.delete_message.message.loading"), ephemeral=True)
                 uuid = get_uuid_from_message_id(str(message_id))
                 if uuid == None:
-                    await interaction.edit_original_response(content=f"`❌` Error: The message could not be deleted because it is not in the database.")
+                    await interaction.edit_original_response(content=translator.translate("command.delete_message.error.not_in_database"))
                     return                
                 data_messages = get_messages_by_uuid(uuid)
                 merged_ids = merge_ids(data_messages)
                 servers = await delete_messages(self, merged_ids)
-                await interaction.edit_original_response(content=f"`✅` Message deleted on `{servers}` servers.")
+                await interaction.edit_original_response(content=translator.translate("command.delete_message.message.succes", servers=servers))
             except:
-                await interaction.edit_original_response(content=f"`❌` An error occurred while deleting the message.")
+                await interaction.edit_original_response(content=translator.translate("command.delete_message.message.error"))
 
         else:
             await interaction.response.send_message(f"{permission_error_message}", ephemeral=True)
@@ -284,27 +291,27 @@ class admin_commands(commands.Cog):
             return    
         if permission_level >= 4:
             try:            
-                await interaction.response.send_message(f"`🔌` Loading...", ephemeral=True)
+                await interaction.response.send_message(content=translator.translate("command.delete_message.message.loading"), ephemeral=True)
                 uuid = get_uuid_from_message_id(str(message.id))
                 if uuid == None:
-                    await interaction.edit_original_response(content=f"`❌` Error: The message could not be deleted because it is not in the database.")
+                    await interaction.edit_original_response(content=translator.translate("command.delete_message.error.not_in_database"))
                     return                
                 data_messages = get_messages_by_uuid(uuid)
                 merged_ids = merge_ids(data_messages)
                 servers = await delete_messages(self, merged_ids)
-                await interaction.edit_original_response(content=f"`✅` Message deleted on `{servers}` servers.")
+                await interaction.edit_original_response(content=translator.translate("command.delete_message.message.succes", servers=servers))
             except:
-                await interaction.edit_original_response(content=f"`❌` An error occurred while deleting the message.")
+                await interaction.edit_original_response(content=translator.translate("command.delete_message.message.error"))
 
         else:
             await interaction.response.send_message(f"{permission_error_message}", ephemeral=True)
 
 
         
-    @app_commands.command(name="server-list", description="Outputs the list of banned users")
+    @app_commands.command(name="server-list", description=translator.translate("command.server_list.description"))
     @app_commands.guilds(admin_guild)
     @app_commands.default_permissions(manage_messages=True)
-    @app_commands.describe(amount="Specify how many servers should be displayed")
+    @app_commands.describe(amount=translator.translate("command.server_list.parameter.amount"))
     @app_commands.choices(amount=[app_commands.Choice(name="50", value="50"), app_commands.Choice(name="100", value="100"), app_commands.Choice(name="200", value="200")])
     async def server_list(self, interaction: discord.Interaction, amount: app_commands.Choice[str] = None):
         L = 10 #Length
@@ -327,13 +334,13 @@ class admin_commands(commands.Cog):
                 formatted_list.append(f"{check_mark} **{guild.name}** - `{guild.member_count}`")
                     
             async def get_page(page: int):
-                emb = discord.Embed(title=f"Servers ({server_count})", description="These are all servers where the Global Chat bot is, and you can see if they have activated the Global Chat. Use the arrows below to navigate through the pages.\n\n", color=int(color["white_color"], 16))
+                emb = discord.Embed(title=translator.translate("command.server_list.embed.title", server_count=server_count), description=translator.translate("command.server_list.embed.description"), color=int(color["white_color"], 16))
                 offset = (page-1) * L
                 for server in formatted_list[offset:offset+L]:
                     emb.description += f"{server}\n"
     #            emb.set_author(name=f"Requested by {interaction.user}")
                 n = Pagination.compute_total_pages(len(formatted_list), L)
-                emb.set_footer(text=f"{bot_name} - Page {page} from {n}", icon_url=f"{bot_logo_url}")
+                emb.set_footer(text=translator.translate("command.server_list.embed.footer", bot_name=bot_name, page=page, n=n), icon_url=f"{bot_logo_url}")
     #            emb.set_footer(text=f"Page {page} from {n}")
                 return emb, n
 
@@ -388,13 +395,7 @@ class Pagination(discord.ui.View):
     async def interaction_check(self, interaction: discord.Interaction) -> bool:
         if interaction.user == self.interaction.user:
             return True
-        else:
-            emb = discord.Embed(
-                description=f"Only the author of the command can perform this action.",
-                color=16711680
-            )
-            await interaction.response.send_message(embed=emb, ephemeral=True)
-            return False
+
 
     async def navegate(self):
         emb, self.total_pages = await self.get_page(self.index)

@@ -7,6 +7,8 @@ import json
 import mysql.connector
 from datetime import datetime
 import pytz
+
+from ...i18n import *
 ##########################################################################
 load_dotenv()
 config_location = os.getenv('config_location')
@@ -19,6 +21,11 @@ bot_invite = config["bot_invite"]
 bot_support_server = config["bot_support_server"]
 bot_website = config["bot_website"]
 bot_website_enabled = config["bot_website_enabled"]
+##########################################################################
+language = config["language"]
+language_file_path = config["language_file_path"]
+
+translator = Translator(language_file_path, language)
 ##########################################################################
 color_location = config["color_file_path"]
 with open(color_location, 'r') as file:
@@ -33,11 +40,11 @@ class info_commands(commands.Cog):
     def __init__(self, client: commands.Bot):
         self.client = client
 
-    @app_commands.command(name="help", description="A detailed and user-friendly list of all commands")
+    @app_commands.command(name="help", description=translator.translate("command.help.description"))
     async def help(self, interaction: discord.Interaction):
-        embed = discord.Embed(title="Help", description=f"All commands:", color=int(color["white_color"], 16), timestamp=embed_timestamp)
-        embed.add_field(name="Add Global", value=f"With `/add-global`, you can make the channel you are currently in a Global Chat.")
-        embed.add_field(name="Remove Global", value=f"With `/remove-global`, you can remove the Global Chat from your server.")
+        embed = discord.Embed(title=translator.translate("command.help.embed.title"), description=translator.translate("command.help.embed.description"), color=int(color["white_color"], 16), timestamp=embed_timestamp)
+        embed.add_field(name=translator.translate("command.help.embed.add_global.name"), value=translator.translate("command.help.embed.add_global.value"))
+        embed.add_field(name=translator.translate("command.help.embed.remove_global.name"), value=translator.translate("command.help.embed.remove_global.value"))
         embed.set_footer(text=f"{bot_name}", icon_url=f"{bot_logo_url}")
 
         await interaction.response.send_message(embed=embed, ephemeral=True, view=HelpButtons())

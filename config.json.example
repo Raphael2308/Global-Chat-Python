@@ -1,4 +1,7 @@
 {
+    "language": "en",
+
+    "language_file_path": "./src/data",
     "swear_file_path": "./src/messages/swear.txt",
     "bot_settings_file_path":"./src/bot_settings.json", 
     "emoji_file_path":"./src/emoji.txt",

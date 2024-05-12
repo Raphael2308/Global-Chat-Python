@@ -1,0 +1,148 @@
+{
+  "command.staff_list.description": "",
+  "command.set_role.description": "",
+  "command.set_role.parameter.userid": "",
+  "command.set_role.parameter.role": "",
+  "command.set_role.parameter.permission_level": "",
+  "command.clear_table.description": "",
+  "command.chat_lock.description": "",
+  "command.chat_lock.parameter.mode": "",
+  "command.chat_lock.parameter.reason": "",
+  "command.delete_message.description": "",
+  "command.delete_message.parameter.message_id": "",
+  "command.server_list.description": "",
+  "command.server_list.parameter.amount": "",
+
+  "command.ban_list.description": "",
+  "command.ban_user.description": "",
+  "command.ban_user.parameter.userid": "",
+  "command.ban_user.parameter.reason": "",
+  "command.unban_user.description": "",
+  "command.unban_user.parameter.userid": "",
+
+  "command.add_global.description": "",
+  "command.add_global.parameter.channel": "",
+  "command.remove_global.description": "",
+
+  "command.help.description": "",
+
+  "client.tree.cooldown": "",
+  "client.tree.bot_missing_Permissions": "",
+
+  "cogs.global_chat.ban_embed.title": "",
+  "cogs.global_chat.ban_embed.description": "",
+  "cogs.global_chat.ban_embed.ban_reason.name": "",
+
+  "cogs.global_chat.block_embed.title": "",
+  "cogs.global_chat.block_embed.description": "",
+  "cogs.global_chat.block_embed.block_reason.name": "",
+  "cogs.global_chat.block_embed.block_reason.value.filter_text": "",
+  "cogs.global_chat.block_embed.block_reason.value.filter_swear": "",
+  "cogs.global_chat.block_embed.block_reason.value.filter_link": "",
+
+  "cogs.global_chat.chat_lock_embed.title": "",
+  "cogs.global_chat.chat_lock_embed.description": "",
+  "cogs.global_chat.chat_lock.lock_reason.name": "",
+
+  "cogs.global_chat.cooldown_embed.title": "",
+  "cogs.global_chat.cooldown_embed.description": "",
+
+  "cogs.global_chat.image_error_embed.title": "",
+  "cogs.global_chat.image_error_embed.description": "",
+
+  "cogs.global_chat.message.replied_to": "",
+  "cogs.global_chat.message.links_help": "",
+
+  "cogs.global_setup.welcome_embed.title": "",
+  "cogs.global_setup.welcome_embed.description": "",
+
+  "cogs.admin_commands.permission_error_message": "",
+
+  "command.staff_list.embed.title": "",
+  "commands.staff_list.embed.description": "",
+
+  "command.set_role.embed.title": "",
+  "command.set_role.embed.description": "",
+  "command.set_role.embed.user_id.name": "",
+  "command.set_role.embed.role.name": "",
+  "command.set_role.embed.permission_level.name": "",
+  "command.set_role.log_embed.title.role_removed": "",
+  "command.set_role.log_embed.title.role_changed": "",
+  "command.set_role.log_embed.title.role_added": "",
+  "command.set.role.log_embed.title.role_change": "",
+  "command.set_role.log_embed.description": "",
+  "command.set_role.log_embed.user.name": "",
+  "command.set_role.log_embed.role.name": "",
+  "command.set_role.log_embed.permission_level.name": "",
+  "command.set_role.error": "",
+  "command.set_role.error.user": "",
+
+  "command.clear_database.message.succes": "",
+  "command.clear_database.message.error": "",
+
+  "command.chat_lock.parameter.mode.on": "",
+  "command.chat_lock.parameter.mode.off": "",
+  "command.chat_lock.message.loading": "",
+  "command.chat_lock.message.locked": "",
+  "command.chat_lock.message.unlocked": "",
+  "command.chat_lock.message.error": "",
+
+  "command.delete_message.message.loading": "",
+  "command.delete_message.message.succes": "",
+  "command.delete_message.message.error": "",
+  "command.delete_message.error.not_in_database": "",
+
+  "command.server_list.embed.title": "",
+  "command.server_list.embed.description": "",
+  "command.server_list.embed.footer": "",
+
+  "command.ban_list.message.empty_list": "",
+  "command.ban_list.ban_list": "",
+  "command.ban_list.embed.title": "",
+  "command.ban_list.embed.description": "",
+
+  "command.ban_user.error.user_already_banned": "",
+  "command.ban_user.embed.title": "",
+  "command.ban_user.embed.description": "",
+  "command.ban_user.embed.user.name": "",
+  "command.ban_user.embed.reason.name": "",
+  "command.ban_user.log_embed.title": "",
+  "command.ban_user.log_embed.description": "",
+  "command.ban_user.log_embed.user.name": "",
+  "command.ban_user.log_embed.reason.name": "",
+
+  "command.unban_user.error.user_is_not_banned": "",
+  "command.unban_user.embed.title": "",
+  "command.unban_user.embed.description": "",
+  "command.unban_user.embed.user.name": "",
+  "command.unban_user.log_embed.title": "",
+  "command.unban_user.log_embed.description": "",
+  "command.unban_user.log_embed.user.name": "",
+  "command.unban_user.log_embed.reason.name": "",
+
+  "command.add_global.message.error": "",
+  "command.add_global.error_embed.description": "",
+  "command.add_global.embed.title": "",
+  "command.add_global.embed.description": "",
+
+  "command.remove_global.message.error": "",
+  "command.remove_global.error_embed.description": "",
+  "command.remove_global.embed.title": "",
+  "command.remove_global.embed.description": "",
+
+  "command.help.embed.title": "",
+  "command.help.embed.description": "",
+  "command.help.embed.add_global.name": "",
+  "command.help.embed.add_global.value": "",
+  "command.help.embed.remove_global.name": "",
+  "command.help.embed.remove_global.value": "",
+
+  "command.report_message.ban_embed.title": "",
+  "command.report_message.ban_embed.description": "",
+  "command.report_message.ban_embed.reason.name": "",
+  "command.report_message.message.loading": "",
+  "command.report_message.error.not_in_database": "",
+  "command.report_message.message.succes": "",
+  "command.report_message.log_embed.title": "",
+  "command.report_message.log_embed.description": ""
+}

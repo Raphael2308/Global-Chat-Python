@@ -1,0 +1,164 @@
+{
+  "command.staff_list.description": "Outputs the list of all staff members",
+  "command.set_role.description": "Allows you to set the role of a user",
+  "command.set_role.parameter.userid": "Enter the User ID of the user",
+  "command.set_role.parameter.role": "Enter the role that the user should receive",
+  "command.set_role.parameter.permission_level": "Specify the permission level that the user should receive",
+  "command.clear_table.description": "Allows you to clear the Message IDs database",
+  "command.chat_lock.description": "Allows you to lock the global chat",
+  "command.chat_lock.parameter.mode": "Choose the chat lock mode",
+  "command.chat_lock.parameter.reason": "Specify the reason for the chat lock",
+  "command.delete_message.description": "Allows you to delete a message",
+  "command.delete_message.parameter.message_id": "Enter the Message ID",
+  "command.server_list.description": "Outputs the list of banned users",
+  "command.server_list.parameter.amount": "Specify how many servers should be displayed",
+
+  "command.ban_list.description": "Outputs the list of banned users",
+  "command.ban_user.description": "Lets you ban a user from using some Bot features",
+  "command.ban_user.parameter.userid": "Enter the User ID of the user",
+  "command.ban_user.parameter.reason": "Enter the reason why the user should be banned",
+  "command.unban_user.description": "Unbans a user by ID",
+  "command.unban_user.parameter.userid": "Enter the User ID of the user",
+
+  "command.add_global.description": "Let's you add a Global Chat to your server",
+  "command.add_global.parameter.channel": "Specify a channel to become a Global Chat",
+  "command.remove_global.description": "Let's you remove the Global Chat from your server",
+
+  "command.help.description": "A detailed and user-friendly list of all commands",
+
+
+  "client.tree.cooldown": "`⌛` Cooldown! Please retry in **$seconds **seconds.",
+  "client.tree.bot_missing_Permissions": "`❌` I don't have sufficient permissions. Please make sure that the BOT has the permissions it's granted with when invited. To fix this error, re-invite the bot using the official invite link.",
+
+
+
+  "cogs.global_chat.ban_embed.title": "You are banned",
+  "cogs.global_chat.ban_embed.description": "You have been banned from the Global Chat. If you believe you were banned in error, join the support server and open a ticket.",
+  "cogs.global_chat.ban_embed.ban_reason.name": "Ban reason",
+
+  "cogs.global_chat.block_embed.title": "Message blocked",
+  "cogs.global_chat.block_embed.description": "Your message has been blocked by the Global Chat.",
+  "cogs.global_chat.block_embed.block_reason.name": "Block reason",
+  "cogs.global_chat.block_embed.block_reason.value.filter_text": "Banned Unicode character",
+  "cogs.global_chat.block_embed.block_reason.value.filter_swear": "Swear word blocked",
+  "cogs.global_chat.block_embed.block_reason.value.filter_link": "Link blocked",
+
+  "cogs.global_chat.chat_lock_embed.title": "Chat locked",
+  "cogs.global_chat.chat_lock_embed.description": "The Global Chat is currently locked. If you believe this is an error or if you want to know why the chat is locked, join the support server.",
+  "cogs.global_chat.chat_lock.lock_reason.name": "Chat Lock reason",
+
+  "cogs.global_chat.cooldown_embed.title": "Cooldown",
+  "cogs.global_chat.cooldown_embed.description": "The Global Chat bot has a cooldown of 5 seconds to prevent spam. Please wait for this duration before sending a new message.",
+
+  "cogs.global_chat.image_error_embed.title": "Image error",
+  "cogs.global_chat.image_error_embed.description": "Error: You cannot send empty messages or images. If you believe this is an error, join the support server.",
+
+  "cogs.global_chat.message.replied_to": "Replied To",
+  "cogs.global_chat.message.links_help": "Links & Help",
+
+
+
+  "cogs.global_setup.welcome_embed.title": "Welcome, $guild",
+  "cogs.global_setup.welcome_embed.description": "The server `$guild` has joined the Global Chat. We hope you'll have a nice stay.",
+
+
+
+  "cogs.admin_commands.permission_error_message": "`❌` You are not staff or your permission level is not high enough.",
+
+  "command.staff_list.embed.title": "Staff list",
+  "commands.staff_list.embed.description": "That's a list of all current staff members.\n$formatted_text",
+
+  "command.set_role.embed.title": "Role Change",
+  "command.set_role.embed.description": "You have successfully changed the role of the user <@$member_id>.",
+  "command.set_role.embed.user_id.name": "User ID",
+  "command.set_role.embed.role.name": "Role",
+  "command.set_role.embed.permission_level.name": "Permission Level",
+  "command.set_role.log_embed.title.role_removed": "User Role removed.",
+  "command.set_role.log_embed.title.role_changed": "User Role changed",
+  "command.set_role.log_embed.title.role_added": "User Role added.",
+  "command.set.role.log_embed.title.role_change": "Role Change",
+  "command.set_role.log_embed.description": "The following user has been reviewed by <@$user_id>.",
+  "command.set_role.log_embed.user.name": "User",
+  "command.set_role.log_embed.role.name": "Role",
+  "command.set_role.log_embed.permission_level.name": "Permission Level",
+  "command.set_role.error": "`❌` An error occurred.",
+  "command.set_role.error.user": "You cannot move <@$member_id> to the default group as they are already in the default group.",
+
+  "command.clear_database.message.succes": "`✅` The Message IDs database was successfully cleared.",
+  "command.clear_database.message.error": "`❌` An error occurred while clearing the Message IDS table.",
+
+  "command.chat_lock.parameter.mode.on": "On",
+  "command.chat_lock.parameter.mode.off": "Off",
+  "command.chat_lock.message.loading": "`🔌` Loading...",
+  "command.chat_lock.message.locked": "`🔒` The global chat has been successfully locked.",
+  "command.chat_lock.message.unlocked": "`🔓` The global chat has been successfully unlocked.",
+  "command.chat_lock.message.error": "`❌` An error occurred while locking the chat.",
+
+  "command.delete_message.message.loading": "`🔌` Loading...",
+  "command.delete_message.message.succes": "`✅` Message deleted on `$servers` servers.",
+  "command.delete_message.message.error": "`❌` An error occurred while deleting the message.",
+  "command.delete_message.error.not_in_database": "`❌` Error: The message could not be deleted because it is not in the database.",
+
+  "command.server_list.embed.title": "Servers ($server_count)",
+  "command.server_list.embed.description": "These are all servers where the Global Chat bot is, and you can see if they have activated the Global Chat. Use the arrows below to navigate through the pages.\n\n",
+  "command.server_list.embed.footer": "$bot_name - Page $page from $n",
+
+
+
+  "command.ban_list.message.empty_list": "The ban list is empty.",
+  "command.ban_list.ban_list": "<@$user_id> | Reason: `$reason`\n",
+  "command.ban_list.embed.title": "Banned Users",
+  "command.ban_list.embed.description": "The following users have been banned by admins:\n\n$output",
+
+  "command.ban_user.error.user_already_banned": "`❌` This user is already banned.",
+  "command.ban_user.embed.title": "User Banned",
+  "command.ban_user.embed.description": "Your User ID is `$user_id`. Thank you for taking action and maintaining a positive environment for the bot. You've successfully banned the following user:",
+  "command.ban_user.embed.user.name": "User",
+  "command.ban_user.embed.reason.name": "Reason",
+  "command.ban_user.log_embed.title": "User Banned",
+  "command.ban_user.log_embed.description": "The Following user was banned by <@$user_id>.",
+  "command.ban_user.log_embed.user.name": "User",
+  "command.ban_user.log_embed.reason.name": "Reason",
+
+  "command.unban_user.error.user_is_not_banned": "`❌` User is not banned.",
+  "command.unban_user.embed.title": "User Unbanned",
+  "command.unban_user.embed.description": "Your User ID is `$user_id`. Thank you for taking action and maintaining a positive environment for the bot. You've successfully unbanned the following user:",
+  "command.unban_user.embed.user.name": "User",
+  "command.unban_user.log_embed.title": "User Unbanned",
+  "command.unban_user.log_embed.description": "The Following user was unbanned by <@$user_id>",
+  "command.unban_user.log_embed.user.name": "User",
+  "command.unban_user.log_embed.reason.name": "Ban Reason",
+
+
+
+  "command.add_global.message.error": "`❌` An error occurred",
+  "command.add_global.error_embed.description": "You already have a GlobalChat on your server.\nPlease note that each server can only have one GlobalChat.",
+  "command.add_global.embed.title": "**Welcome to the GlobalChat**",
+  "command.add_global.embed.description": "Your server is ready for action! From now on, all messages in this channel will be broadcasted to all other servers!\n\nThe Global Chat channel is <#$channel>.\n\nPlease note that in the GlobalChat, there should always be a slow mode of at least 5 seconds.",
+
+  "command.remove_global.message.error": "`❌` An error occurred",
+  "command.remove_global.error_embed.description": "You don't have a GlobalChat on your server yet.\nAdd one with `/add-global` in a fresh channel.",
+  "command.remove_global.embed.title": "**See you!**",
+  "command.remove_global.embed.description": "The GlobalChat has been removed.\nYou can add it back anytime with `/add-global`.",
+
+
+
+  "command.help.embed.title": "Help",
+  "command.help.embed.description": "All commands:",
+  "command.help.embed.add_global.name": "Add Global",
+  "command.help.embed.add_global.value": "With `/add-global`, you can make the channel you are currently in a Global Chat.",
+  "command.help.embed.remove_global.name": "Remove Global",
+  "command.help.embed.remove_global.value": "With `/remove-global`, you can remove the Global Chat from your server.",
+
+
+
+  "command.report_message.ban_embed.title": "You are banned",
+  "command.report_message.ban_embed.description": "You have been banned from the Global Chat. If you believe you were banned in error, join the support server and open a ticket.",
+  "command.report_message.ban_embed.reason.name": "Ban reason",
+  "command.report_message.message.loading": "`🔌` Loading...",
+  "command.report_message.error.not_in_database": "`❌` Error: The message could not be reported because it was not sent in the global chat.",
+  "command.report_message.message.succes": "`✅` Message successfully reported",
+  "command.report_message.log_embed.title": "Message Reported",
+  "command.report_message.log_embed.description": "**Message Content:**\n\n```\n$message_description```\nMessage Author: <@$message_author>\nMessage ID: `$message_id`\nMessage UUID: `$uuid`\n\nReportet by: <@$user_id>"
+
+}

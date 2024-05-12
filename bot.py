@@ -9,7 +9,9 @@ from discord.ext.commands import CommandOnCooldown
 from discord import app_commands
 import os
 from dotenv import load_dotenv
+
 from src.my_sql import start_connection_checker
+import src.i18n as i18n
 ##########################################################################
 load_dotenv()
 
@@ -21,6 +23,10 @@ with open(config_location, 'r', encoding='utf-8') as file:
 
 admin_guild = config["admin_guild"]
 bot_status = config["bot_status"]
+language = config["language"]
+language_file_path = config["language_file_path"]
+
+translator = i18n.Translator(language_file_path, language)
 ##########################################################################
 def clear_console():
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -57,9 +63,9 @@ client.remove_command('help')
 
 async def on_tree_error(interaction: discord.Interaction, error: app_commands.AppCommandError):
     if isinstance(error, app_commands.CommandOnCooldown):
-        await interaction.response.send_message(f"`⌛` Cooldown. Please retry in **{round(error.retry_after, 1)}** seconds.", ephemeral=True)
+        await interaction.response.send_message(content=translator.translate("client.tree.cooldown", seconds=round(error.retry_after, 1)), ephemeral=True)
     elif isinstance(error, app_commands.BotMissingPermissions):
-        await interaction.response.send_message("`❌` I don't have sufficient permissions. Please make sure that the BOT has the permissions it's granted with when invited. To fix this error, re-invite the bot using the official invite link.", ephemeral=True)
+        await interaction.response.send_message(content=translator.translate("client.tree.bot_missing_Permissions"), ephemeral=True)
 client.tree.on_error = on_tree_error
 
 

@@ -1,0 +1,148 @@
+{
+  "command.staff_list.description": "Zeigt dir alle Staff Mitglieder an",
+  "command.set_role.description": "Erlaubt dir die Rolle eines Nutzers zu ändern",
+  "command.set_role.parameter.userid": "Gib die Nutzer ID des Nutzers an",
+  "command.set_role.parameter.role": "Gib die Rolle an, die der Nutzer bekommen soll",
+  "command.set_role.parameter.permission_level": "Gib das Berrechtigunslevel an, das der Nutzer bekommen soll",
+  "command.clear_table.description": "Lösche den Inhalt der Message Database",
+  "command.chat_lock.description": "Erlaubt dir, den Global Chat zu sperren",
+  "command.chat_lock.parameter.mode": "Schalte die Global Chat Sperra an oder aus",
+  "command.chat_lock.parameter.reason": "Gib den Grund für die Global Chat Sperre an",
+  "command.delete_message.description": "Erlaub es dir eine Nachricht aus dem Global Chat zu löschen",
+  "command.delete_message.parameter.message_id": "Gib die Nachrichten ID der Nachricht an",
+  "command.server_list.description": "Zeigt dir an, in welchen Servern der Global Chat ist",
+  "command.server_list.parameter.amount": "Wie viele Server sollen angezeigt werden",
+
+  "command.ban_list.description": "Zeigt dir alle vom Global Chat gesperrten Leute an",
+  "command.ban_user.description": "Erlaubt es dir einen Nutzer aus dem Global chat zu sperren",
+  "command.ban_user.parameter.userid": "Gib die Nutzer ID des Nutzers an",
+  "command.ban_user.parameter.reason": "Gib den Grund für die Sperre an",
+  "command.unban_user.description": "Erlaubt es dir einen gesperrten Nutzer zu entsperren",
+  "command.unban_user.parameter.userid": "Gib die Nutzer ID des Nutzers an",
+
+  "command.add_global.description": "Füge den Global Chat zu deinem Server hinzu",
+  "command.add_global.parameter.channel": "Gib den Kanal an, der zum Global Chat werden soll",
+  "command.remove_global.description": "Entferne den Global Chat von deinem Server",
+
+  "command.help.description": "Gibt dir eine detaillierte Beschreibung aller Befehle",
+
+  "client.tree.cooldown": "`⌛` Bite warte **$seconds** sekunden, bevor du den Befehl noch einmal verwendest.",
+  "client.tree.bot_missing_Permissions": "`❌` Ich habe nicht genügend Berrechtigungen. Bitte stelle sich, dass der Bot die Berrechtigungen hat, die er beim Einladen hatte. Um diesen Fehler zu beheben, lade den Bot mit dem offiziellen Einladungslink noch einmal ein.",
+
+  "cogs.global_chat.ban_embed.title": "Du bist gesperrt",
+  "cogs.global_chat.ban_embed.description": "Du wurdest vom Global Chat gesperrt. Wenn du denkst, dass das ein Fehler ist, tritt dem Support Server bei und öffne ein Ticket",
+  "cogs.global_chat.ban_embed.ban_reason.name": "Grund der Sperre",
+
+  "cogs.global_chat.block_embed.title": "Nachricht geblockt",
+  "cogs.global_chat.block_embed.description": "Deine Nachricht wurde vom Global Chat geblock, da ihr Inhalt gegen die Global Chat Regeln verstößt.",
+  "cogs.global_chat.block_embed.block_reason.name": "Grund des Blockes",
+  "cogs.global_chat.block_embed.block_reason.value.filter_text": "Nicht erlaubter Unicode Character",
+  "cogs.global_chat.block_embed.block_reason.value.filter_swear": "Schimpfwort geblockt",
+  "cogs.global_chat.block_embed.block_reason.value.filter_link": "link geblockt",
+
+  "cogs.global_chat.chat_lock_embed.title": "Chat gesperrt",
+  "cogs.global_chat.chat_lock_embed.description": "Der Global Chat ist derzeit von einem Teammitglied gesperrt. Wenn du denkst, dass dies ein Fehler ist, oder wenn du wissen möchtest, warum genau der Global Chat gesperrt ist, tritt dem Support-Server bei.",
+  "cogs.global_chat.chat_lock.lock_reason.name": "Grund der Sperrung",
+
+  "cogs.global_chat.cooldown_embed.title": "Hey, warte!",
+  "cogs.global_chat.cooldown_embed.description": "Du kannst im Global Chat nur aller 5 Sekunden eine Nachricht senden, damit Spam verhindert wird.",
+
+  "cogs.global_chat.image_error_embed.title": "Bild Fehler",
+  "cogs.global_chat.image_error_embed.description": "Du kannst im Global Chat keine Bilder oder lehre Nachrichten senden. Wenn du denkst, dass das ein Fehler ist, tritt dem Support Server bei.",
+
+  "cogs.global_chat.message.replied_to": "Geantwortet auf",
+  "cogs.global_chat.message.links_help": "Links & Hilfe",
+
+  "cogs.global_setup.welcome_embed.title": "Willkommen, $guild!",
+  "cogs.global_setup.welcome_embed.description": "Der Server `$guild` ist gerade dem Globla Chat beigetreten. Wir hoffen, dass du dich hier wohl fühlen wirst.",
+
+  "cogs.admin_commands.permission_error_message": "`❌` Du bist kein Teammitglied oder dein Berrechtigunslevel ist nicht hoch genug.",
+
+  "command.staff_list.embed.title": "Teammitglieder Liste",
+  "commands.staff_list.embed.description": "Das ist eine Liste von allen Teammitgliedern.\n$formatted_text",
+
+  "command.set_role.embed.title": "Rolle geändert",
+  "command.set_role.embed.description": "Du hasst erfolgreich die Rolle von dem Nutzer <@$member_id> geändert.",
+  "command.set_role.embed.user_id.name": "nutzer ID",
+  "command.set_role.embed.role.name": "Rolle",
+  "command.set_role.embed.permission_level.name": "Berrechtigunslevel",
+  "command.set_role.log_embed.title.role_removed": "Rolle von Nutzer entfernt",
+  "command.set_role.log_embed.title.role_changed": "Rolle von Nutzer geändert",
+  "command.set_role.log_embed.title.role_added": "Rolle zu Nutzer hinzu gefügt",
+  "command.set.role.log_embed.title.role_change": "Rolle von Nutzer geändert",
+  "command.set_role.log_embed.description": "Der folgende Nutzer wurde von <@$user_id> aktualisiert",
+  "command.set_role.log_embed.user.name": "Nutzer",
+  "command.set_role.log_embed.role.name": "Rolle",
+  "command.set_role.log_embed.permission_level.name": "Berrechtigunslevel",
+  "command.set_role.error": "`❌` Ein Fehler ist aufgetreten",
+  "command.set_role.error.user": "Du kannst den Nutzer <@$member_id> nicht in die Standard Gruppe verschieben, da er schon in der Standard gruppe ist.",
+
+  "command.clear_database.message.succes": "`✅` Die Nachrichten ID Datenbank wurde erfolgreich geleert.",
+  "command.clear_database.message.error": "`❌` Ein Fehler ist während der Leerung der Nachrichten Datenbank aufgetreten.",
+
+  "command.chat_lock.parameter.mode.on": "An",
+  "command.chat_lock.parameter.mode.off": "Aus",
+  "command.chat_lock.message.loading": "`🔌` Laden...",
+  "command.chat_lock.message.locked": "`🔒` Der Global Chat wurde erfolgreich gesperrt.",
+  "command.chat_lock.message.unlocked": "🔓` Der Global Chat wurde erfolgreich entsperrt.",
+  "command.chat_lock.message.error": "`❌` Ein Fehler ist aufgetreten.",
+
+  "command.delete_message.message.loading": "`🔌` Laden...",
+  "command.delete_message.message.succes": "`✅` Die Nachricht wurde erfolgreich auf `$servers` Servern gelöscht.",
+  "command.delete_message.message.error": "`❌` Ein Fehler ist aufgetreten.",
+  "command.delete_message.error.not_in_database": "`❌` Die Nachricht konnte nicht gelöscht werden, da sie nicht in der Datenbank ist.",
+
+  "command.server_list.embed.title": "Server ($server_count)",
+  "command.server_list.embed.description": "Das sind alle Server, die den Global Chat Bot haben. Du kannst sehen, ob die Server dne Global Chat aktiviert haben. Nutze Die Pfeile unten, um durch die Seiten zu navigieren.\n\n",
+  "command.server_list.embed.footer": "$bot_name - Seite $page von $n",
+
+  "command.ban_list.message.empty_list": "Die Sperrliste ist leer.",
+  "command.ban_list.ban_list": "<@$user_id> | Grund: `$reason`\n",
+  "command.ban_list.embed.title": "Gesperrte Nutzer",
+  "command.ban_list.embed.description": "Die folgenden Nutzer wurden von Teammitgliedern gesperrt:\n\n$output",
+
+  "command.ban_user.error.user_already_banned": "`❌` Dieser Benutzer ist schon gesperrt.",
+  "command.ban_user.embed.title": "Nutzer gespeert",
+  "command.ban_user.embed.description": "Deine Nutzer ID ist `$user_id`. Danke, dass eine positive Umgebung im Global Chat schaffst. Du hast den folgenden nutzer gesperrt:",
+  "command.ban_user.embed.user.name": "Nutzer",
+  "command.ban_user.embed.reason.name": "Grund",
+  "command.ban_user.log_embed.title": "Nutzer gesperrt",
+  "command.ban_user.log_embed.description": "Der folgende Nutzer wurde von <@$user_id> gesperrt.",
+  "command.ban_user.log_embed.user.name": "Nutzer",
+  "command.ban_user.log_embed.reason.name": "Grund",
+
+  "command.unban_user.error.user_is_not_banned": "`❌` Dieser Nutzer ist nicht gesperrt.",
+  "command.unban_user.embed.title": "Nutzer entsperrt",
+  "command.unban_user.embed.description": "Deine Nutzer ID ist `$user_id`. Du hast den folgenden nutzer entsperrt:",
+  "command.unban_user.embed.user.name": "Nutzer",
+  "command.unban_user.log_embed.title": "Nutzer entsperrt",
+  "command.unban_user.log_embed.description": "Der folgende Nutzer wurde von <@$user_id> entsperrt.",
+  "command.unban_user.log_embed.user.name": "Nutzer",
+  "command.unban_user.log_embed.reason.name": "Grund der Sperrung",
+
+  "command.add_global.message.error": "`❌` Ein Fehler ist aufgetreten.",
+  "command.add_global.error_embed.description": "Du hast bereits einen Global Chat auf deinem Server.\nJeder Server kann nur einen Glboal Chat haben.",
+  "command.add_global.embed.title": "**Willkommen im Global Chat**",
+  "command.add_global.embed.description": "Der GLobal Chat wurde erfolgreich eingerichtet. Alle Nachrichten in diesem Kanal werden jetzt auf  mehreren Servern versendet!\n\nDer Global Chat Kanal ist <#$channel>. Bitte stelle sicher, dass im Global Chat Kanal immer ein Slowmode von 5 Sekunden an ist.",
+
+  "command.remove_global.message.error": "`❌` Ein Fehler ist aufgetreten.",
+  "command.remove_global.error_embed.description": "Dein Server hat keinen Global Chat gerade.\nMache einen Kanal mit `/add-global` zum Global Chat",
+  "command.remove_global.embed.title": "**Auf Wiedersehen**",
+  "command.remove_global.embed.description": "Der Global Chat wurde von deinem Server entfernt.",
+
+  "command.help.embed.title": "Hilfe",
+  "command.help.embed.description": "Alle Befehle:",
+  "command.help.embed.add_global.name": "Global Chat einrichten",
+  "command.help.embed.add_global.value": "Mit `/add-global` kannst du einen Kanal auf deinem Server zu einem Global Chat machen.",
+  "command.help.embed.remove_global.name": "Global Chat entfernen",
+  "command.help.embed.remove_global.value": "Mit `/remove-global` kannst du den Global Chat von deinem Server entfernen.",
+
+  "command.report_message.ban_embed.title": "Du bist gesperrt",
+  "command.report_message.ban_embed.description": "Du wurdest vom Global Chat gesperrt. Wenn du denkst, dass das ein Fehler ist, tritt dem Support Server bei und öffne ein Ticket",
+  "command.report_message.ban_embed.reason.name": "Grund der Sperre",
+  "command.report_message.message.loading": "`🔌` Laden...",
+  "command.report_message.error.not_in_database": "`❌` Die Nachricht konnte nicht gemeldet werden, da sie nicht in der Datenbank ist.",
+  "command.report_message.message.succes": "`✅` Die Nachricht wurde erfolgreich gemeldet.",
+  "command.report_message.log_embed.title": "Nachricht gemeldet",
+  "command.report_message.log_embed.description": "**Nachrichten Inhalt:** \n\n```\n$message_description```\nNachrichten Sender: <@$message_author>\nNachricht ID: `$message_id`\nNachricht UUID: `$uuid`\n\nGemeldet von: <@$user_id>"
+}

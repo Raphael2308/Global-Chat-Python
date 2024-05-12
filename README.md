@@ -51,6 +51,9 @@ Next, the config.json will be edited. To do this, open the file `./config.json` 
 
 ```json
 {
+  "language": "en",
+
+  "language_file_path": "./src/data",
   "swear_file_path": "./src/messages/swear.txt",
   "bot_settings_file_path": "./src/config/bot_settings.json",
   "emoji_file_path": "./src/messages/emoji.txt",
@@ -104,7 +107,7 @@ standard_server_icon: Icon used for servers with no server icon. You don't have 
 
 ### 2.3 Installing all needed libraries
 
-Finally, you need to install all the required libraries. If you have a Pterodactyl server, click on `Server > Startup > Additional Python Packages`, and add the following there: `discord.py mysql-connector python-dotenv colorama schedule pytz better_profanity`
+Finally, you need to install all the required libraries. If you have a Pterodactyl server, click on `Server > Startup > Additional Python Packages`, and add the following there: `discord.py mysql-connector python-dotenv colorama schedule pytz better_profanity babel`
 
 If you have a different server, you need to enter `pip install <library>` for each library in the console.
 

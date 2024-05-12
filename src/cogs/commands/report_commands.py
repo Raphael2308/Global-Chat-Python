@@ -9,6 +9,7 @@ from datetime import datetime
 import pytz
 
 from ...my_sql import *
+from ...i18n import *
 ##########################################################################
 load_dotenv()
 config_location = os.getenv('config_location')
@@ -30,7 +31,12 @@ bot_support_server =  config["bot_support_server"]
 bot_website =  config["bot_website"]
 
 channel_report_log = config["channel_report_log"]
-##########################################################################        
+##########################################################################
+language = config["language"]
+language_file_path = config["language_file_path"]
+
+translator = Translator(language_file_path, language)
+##########################################################################    
 def get_id_by_url(url):
     index = url.rfind('/')
     if index != -1:
@@ -51,22 +57,25 @@ class report_commands(commands.Cog):
     async def report_message(self, interaction: discord.Interaction, message: discord.Message):
         if is_user_banned(interaction.user.id):
             ban_reason = get_ban_reason(interaction.user.id)
-            embed = discord.Embed(title="You are banned", description=f"You have been banned from the Global Chat. If you believe you were banned in error, join the support server and open a ticket.", color=int(color["red_color"], 16), timestamp=embed_timestamp)
-            embed.add_field(name="Ban reason", value=f"`{ban_reason}`")
+            embed = discord.Embed(title=translator.translate("command.report_message.ban_embed.title"), description=translator.translate("command.report_message.ban_embed.description"), color=int(color["red_color"], 16), timestamp=embed_timestamp)
+            embed.add_field(name=translator.translate("command.report_message.ban_embed.reason.name"), value=f"`{ban_reason}`")
             embed.set_footer(text=f"{bot_name}", icon_url=f"{bot_logo_url}")
             await interaction.response.send_message(embed=embed, view=BanButtons(), ephemeral=True)
             return
 
-        await interaction.response.send_message(f"`🔌` Loading...", ephemeral=True)
+        await interaction.response.send_message(content=translator.translate("command.report_message.message.loading"), ephemeral=True)
         uuid = get_uuid_from_message_id(str(message.id))
         if uuid == None:
-            await interaction.edit_original_response(content=f"`❌` Error: The message could not be reported because it was not sent in the global chat.")
+            await interaction.edit_original_response(content=translator.translate("command.report_message.error.not_in_database"))
             return     
         
         message_description_raw = message.embeds[0].description
         message_description = message_description_raw.replace('\n', '')
+        message_author = get_id_by_url(message.embeds[0].author.url)
 
-        embed = discord.Embed(title=f"Message Reported", description=f"**Message Content:**\n\n```\n{message_description}```\nMessage Author: <@{get_id_by_url(message.embeds[0].author.url)}>\nMessage ID: `{message.id}`\nMessage UUID: `{uuid}`\n\nReportet by: <@{interaction.user.id}>" if message.embeds and message.embeds[0].description else "`❌` Error: No description", color=int(color["red_color"], 16))
+        message_content = translator.translate("command.report_message.log_embed.description", message_description=message_description, message_author=message_author, message_id=message.id, uuid=uuid, user_id=interaction.user.id)
+
+        embed = discord.Embed(title=translator.translate("command.report_message.log_embed.title"), description=message_content, color=int(color["red_color"], 16))
         
     #    if message.embeds and message.embeds[0].author:
     #        embed.set_author(name=message.embeds[0].author.name, icon_url=message.embeds[0].author.icon_url, url=message.embeds[0].author.url)
@@ -77,7 +86,7 @@ class report_commands(commands.Cog):
         buttons = ReportButtons(message.jump_url)
         channel = interaction.client.get_channel(channel_report_log)
         await channel.send(content=f"{message.content}", embed=embed, view=buttons) 
-        await interaction.edit_original_response(content="`✅` Message successfully reported")
+        await interaction.edit_original_response(content=translator.translate("command.report_message.message.succes"))
 
 
         

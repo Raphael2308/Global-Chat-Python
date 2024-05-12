@@ -13,16 +13,24 @@ import time
 import asyncio
 import threading
 from colorama import Back, Fore, Style
-from ..my_sql import *
 
 import re
 from better_profanity import profanity
+
+from ..my_sql import *
+
+from ..i18n import *
 ##########################################################################
 load_dotenv()
 config_location = os.getenv('config_location')
 config_location = os.getenv('config_file')
 with open(config_location, 'r', encoding='utf-8') as file:
     config = json.load(file)
+##########################################################################
+language = config["language"]
+language_file_path = config["language_file_path"]
+
+translator = Translator(language_file_path, language)
 ##########################################################################
 bot_name = config["bot_name"]
 bot_logo_url = config["bot_logo_url"]
@@ -52,12 +60,6 @@ de = pytz.timezone('Europe/Berlin')
 embed_timestamp = datetime.now(de)
 
 global_chat_cooldown = commands.CooldownMapping.from_cooldown(1, 5, commands.BucketType.user)
-
-block_reason = {
-    "filter_text": "Banned Unicode character",
-    "filter_swear": "Swear word blocked",
-    "filter_link": "Link blocked"
-}
 
 discord_url = "https://discordapp.com/users/"
 ##########################################################################
@@ -154,8 +156,8 @@ class global_chat(commands.Cog):
                 ban_reason = get_ban_reason(message.author.id)
                 dm_channel = await message.author.create_dm()
 
-                embed = discord.Embed(title="You are banned", description=f"You have been banned from the Global Chat. If you believe you were banned in error, join the support server and open a ticket.", color=int(color["red_color"], 16), timestamp=embed_timestamp)
-                embed.add_field(name="Ban reason", value=f"`{ban_reason}`")
+                embed = discord.Embed(title=translator.translate("cogs.global_chat.ban_embed.title"), description=translator.translate("cogs.global_chat.ban_embed.description"), color=int(color["red_color"], 16), timestamp=embed_timestamp)
+                embed.add_field(name=translator.translate("cogs.global_chat.ban_embed.ban_reason.name"), value=f"`{ban_reason}`")
                 embed.set_footer(text=f"{bot_name}", icon_url=f"{bot_logo_url}")
                 await dm_channel.send(embed=embed, view=BanButtons())
                 await message.delete()
@@ -165,15 +167,16 @@ class global_chat(commands.Cog):
             if permission_level is None or permission_level <= 15:
                 reason_block = None
                 if filter_text(message.content):
-                    reason_block = block_reason["filter_text"]
+                    reason_block = translator.translate("cogs.global_chat.block_embed.block_reason.value.filter_text")
                 if block_swear(message.content):
-                    reason_block = block_reason["filter_swear"]
+                    reason_block = translator.translate("cogs.global_chat.block_embed.block_reason.value.filter_swear")
                 if block_links(message.content):
-                    reason_block = block_reason["filter_link"]
+                    reason_block = translator.translate("cogs.global_chat.block_embed.block_reason.value.filter_link")
+
                 if reason_block != None:
                     dm_channel = await message.author.create_dm()
-                    embed = discord.Embed(title="Message blocked", description=f"Your message has been blocked by the Global Chat.", color=int(color["red_color"], 16), timestamp=embed_timestamp)
-                    embed.add_field(name="Block reason", value=f"`{reason_block}`")
+                    embed = discord.Embed(title=translator.translate("cogs.global_chat.block_embed.title"), description=translator.translate("cogs.global_chat.block_embed.description"), color=int(color["red_color"], 16), timestamp=embed_timestamp)
+                    embed.add_field(name=translator.translate("cogs.global_chat.block_embed.block_reason.name"), value=f"`{reason_block}`")
                     embed.set_footer(text=f"{bot_name}", icon_url=f"{bot_logo_url}")
                     await dm_channel.send(embed=embed)
                     await message.delete()
@@ -186,8 +189,8 @@ class global_chat(commands.Cog):
                 chat_lock_reason = read_settings_variable("chat_lock_reason")
                 dm_channel = await message.author.create_dm()
 
-                embed = discord.Embed(title="Chat locked", description=f"The Global Chat is currently locked. If you believe this is an error or if you want to know why the chat is locked, join the support server.", color=int(color["red_color"], 16), timestamp=embed_timestamp)
-                embed.add_field(name="Chat Lock reason", value=f"`{chat_lock_reason}`")
+                embed = discord.Embed(title=translator.translate("cogs.global_chat.chat_lock_embed.title"), description=translator.translate("cogs.global_chat.chat_lock_embed.description"), color=int(color["red_color"], 16), timestamp=embed_timestamp)
+                embed.add_field(name=translator.translate("cogs.global_chat.chat_lock.lock_reason.name"), value=f"`{chat_lock_reason}`")
                 embed.set_footer(text=f"{bot_name}", icon_url=f"{bot_logo_url}")
                 await dm_channel.send(embed=embed, view=BanButtons())
                 await message.delete()
@@ -199,7 +202,7 @@ class global_chat(commands.Cog):
                 if retry_after:
                     dm_channel = await message.author.create_dm()
 
-                    embed = discord.Embed(title="Cooldown", description=f"The Global Chat bot has a cooldown of 5 seconds to prevent spam. Please wait for this duration before sending a new message.", color=int(color["red_color"], 16), timestamp=embed_timestamp)
+                    embed = discord.Embed(title=translator.translate("cogs.global_chat.cooldown_embed.title"), description=translator.translate("cogs.global_chat.cooldown_embed.description"), color=int(color["red_color"], 16), timestamp=embed_timestamp)
                     embed.set_footer(text=f"{bot_name}", icon_url=f"{bot_logo_url}")
                     await dm_channel.send(embed=embed)
                     await message.delete()
@@ -207,7 +210,7 @@ class global_chat(commands.Cog):
             if message.content == "":
                 dm_channel = await message.author.create_dm()
 
-                embed = discord.Embed(title="Cooldown", description=f"Error: You cannot send empty messages or images. If you believe this is an error, join the support server.", color=int(color["red_color"], 16), timestamp=embed_timestamp)
+                embed = discord.Embed(title=translator.translate("cogs.global_chat.image_error_embed.title"), description=translator.translate("cogs.global_chat.image_error_embed.description"), color=int(color["red_color"], 16), timestamp=embed_timestamp)
                 embed.set_footer(text=f"{bot_name}", icon_url=f"{bot_logo_url}")
                 await dm_channel.send(embed=embed)
                 await message.delete()
@@ -247,7 +250,7 @@ class global_chat(commands.Cog):
                     if replied_message.embeds:  # Überprüfen, ob die Nachricht Embeds hat
                         embed_description = replied_message.embeds[0].description
                         responded_message = embed_description.replace('\n', '')
-                        embed.add_field(name='Replied To', value=f'```{responded_message}```', inline=False)
+                        embed.add_field(name=translator.translate("cogs.global_chat.message.replied_to"), value=f'```{responded_message}```', inline=False)
 
 
             icon = author.avatar
@@ -274,7 +277,7 @@ class global_chat(commands.Cog):
                 links += f'[Server Invite]({invite})'
 
         #    embed.add_field(name='⠀', value='⠀', inline=False)
-            embed.add_field(name='Links & Help', value=links, inline=False)
+            embed.add_field(name=translator.translate("cogs.global_chat.message.links_help"), value=links, inline=False)
 
         #    if len(attachments) > 0:
         #        img = attachments[0]
@@ -297,10 +300,6 @@ class global_chat(commands.Cog):
                             if perms.embed_links and perms.attach_files and perms.external_emojis:
                                 sent_message = await channel.send(embed=embed)
                                 add_message_id(uuid, sent_message.id, sent_message.guild.id)
-                            else:
-                                sent_message = await channel.send('{0}: {1}'.format(author.name, conent))
-                                add_message_id(uuid, sent_message.id, sent_message.guild.id)
-                                await channel.send('Es fehlen einige Berechtigungen. `Nachrichten senden` `Links einbetten` `Datein anhängen` `Externe Emojis verwenden`')
         except Exception as e:
             print(f"{e}")
             return f"{e}"
